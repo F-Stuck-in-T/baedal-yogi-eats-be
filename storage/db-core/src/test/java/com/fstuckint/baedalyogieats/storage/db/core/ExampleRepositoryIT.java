@@ -19,7 +19,7 @@ public class ExampleRepositoryIT extends CoreDbContextTest {
 		ExampleEntity saved = exampleRepository.save(new ExampleEntity("SPRING_BOOT"));
 		assertThat(saved.getExampleColumn()).isEqualTo("SPRING_BOOT");
 
-		ExampleEntity found = exampleRepository.findById(saved.getId()).get();
+		ExampleEntity found = exampleRepository.findById(saved.getUuid()).get();
 		assertThat(found.getExampleColumn()).isEqualTo("SPRING_BOOT");
 	}
 
