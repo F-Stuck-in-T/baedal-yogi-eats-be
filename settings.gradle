@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'spring-boot-java-template'
+rootProject.name = 'baedal-yogi-eats-be'
 
 include 'core:core-enum'
 include 'core:core-api'
