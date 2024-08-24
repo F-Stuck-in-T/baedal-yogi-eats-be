@@ -1,0 +1,32 @@
+= API Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:snippets: build/generated-snippets
+
+== Introduce
+
+상품 API는 상품을 등록하고 조회하는 기능을 제공합니다.
+
+= 상품 API
+
+== 상품 등록
+
+=== Curl Request
+
+include::{snippets}/상품 등록/curl-request.adoc[]
+
+=== Http Request
+
+include::{snippets}/상품 등록/http-request.adoc[]
+
+=== Http Response
+
+include::{snippets}/상품 등록/http-response.adoc[]
+
+=== Response Fields
+
+include::{snippets}/상품 등록/response-fields.adoc[]
