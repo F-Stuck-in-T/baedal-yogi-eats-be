@@ -81,7 +81,7 @@ class ProductControllerTest extends RestDocsTest {
 		when(productService.find(productUuid)).thenReturn(productResult);
 
 		given().contentType("application/json")
-			.get("/api/v1/product/{productUuid}", productUuid.toString())
+			.get("/api/v1/products/{productUuid}", productUuid.toString())
 			.then()
 			.status(HttpStatus.OK)
 			.apply(document("상품 상세 조회", requestPreprocessor(), responsePreprocessor(),

@@ -29,7 +29,7 @@ public class ProductController {
 		return ApiResponse.success(ProductResponse.of(result));
 	}
 
-	@GetMapping("/api/v1/product/{productUuid}")
+	@GetMapping("/api/v1/products/{productUuid}")
 	public ApiResponse<ProductResponse> findProduct(@PathVariable String productUuid) {
 		ProductResult result = productService.find(UUID.fromString(productUuid));
 		return ApiResponse.success(ProductResponse.of(result));
