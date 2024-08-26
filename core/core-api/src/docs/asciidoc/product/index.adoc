@@ -30,3 +30,21 @@ include::{snippets}/상품 등록/http-response.adoc[]
 === Response Fields
 
 include::{snippets}/상품 등록/response-fields.adoc[]
+
+== 상품 상세 조회
+
+=== Curl Request
+
+include::{snippets}/상품 상세 조회/curl-request.adoc[]
+
+=== Http Request
+
+include::{snippets}/상품 상세 조회/http-request.adoc[]
+
+=== Http Response
+
+include::{snippets}/상품 상세 조회/http-response.adoc[]
+
+=== Response Fields
+
+include::{snippets}/상품 상세 조회/response-fields.adoc[]

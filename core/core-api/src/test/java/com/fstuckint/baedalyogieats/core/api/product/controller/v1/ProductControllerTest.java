@@ -75,4 +75,23 @@ class ProductControllerTest extends RestDocsTest {
 							fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
 	}
 
+	@Test
+	void 상품_상세_조회() {
+		ProductResult productResult = new ProductResult(productUuid, "상품", "상품 설명", 10_000, storeUuid);
+		when(productService.find(productUuid)).thenReturn(productResult);
+
+		given().contentType("application/json")
+			.get("/api/v1/products/{productUuid}", productUuid.toString())
+			.then()
+			.status(HttpStatus.OK)
+			.apply(document("상품 상세 조회", requestPreprocessor(), responsePreprocessor(),
+					responseFields(fieldWithPath("result").type(JsonFieldType.STRING).description("결과"),
+							fieldWithPath("data.uuid").type(JsonFieldType.STRING).description("상품 UUID"),
+							fieldWithPath("data.name").type(JsonFieldType.STRING).description("상품명"),
+							fieldWithPath("data.description").type(JsonFieldType.STRING).description("상품 설명"),
+							fieldWithPath("data.unitPrice").type(JsonFieldType.NUMBER).description("가격"),
+							fieldWithPath("data.storeUuid").type(JsonFieldType.STRING).description("가게 UUID"),
+							fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
+	}
+
 }
