@@ -1,7 +1,8 @@
 package com.fstuckint.baedalyogieats.storage.db.core.user;
 
-import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -50,4 +51,10 @@ public class User {
 
     @Column(length = 100)
     private String deletedBy;
+
+    public User updateUserInfo(String password, String nickname) {
+        this.password = !password.isEmpty() ? password : this.password;
+        this.nickname = !nickname.isEmpty() ? nickname : this.nickname;
+        return this;
+    }
 }

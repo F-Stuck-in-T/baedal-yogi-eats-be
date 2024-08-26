@@ -1,6 +1,7 @@
 package com.fstuckint.baedalyogieats.core.api.user.support.error;
 
 import lombok.Getter;
+import org.springframework.security.core.AuthenticationException;
 
 @Getter
 public class UserException extends RuntimeException {
@@ -20,5 +21,4 @@ public class UserException extends RuntimeException {
 		this.errorType = errorType;
 		this.data = data;
 	}
-
 }

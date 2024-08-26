@@ -1,7 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.user.jwt;
 
-import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
-import com.fstuckint.baedalyogieats.core.api.user.support.error.UserException;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,12 +16,14 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-@Component
 @Slf4j
+@Component
 public class JwtUtils {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
+    public static final String CLAIMS_USERNAME = "username";
+    public static final String CLAIMS_ROLE = "auth";
 
     @Value("${spring.application.name}")
     private String issuer;
@@ -43,8 +43,8 @@ public class JwtUtils {
 
     public String createToken(String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
-                .claim("username", username)
-                .claim("auth", role.getAuthority())
+                .claim(CLAIMS_USERNAME, username)
+                .claim(CLAIMS_ROLE, role.getAuthority())
                 .signWith(key, SignatureAlgorithm.HS256)
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -62,7 +62,7 @@ public class JwtUtils {
         }
     }
 
-    public String getJwtFromHeader(HttpServletRequest request) {
+    public String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
@@ -70,16 +70,14 @@ public class JwtUtils {
         return null;
     }
 
-    public Claims getUserInfoFromToken(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public void CHECK_ADMIN(String bearerToken) {
-        String token = bearerToken.substring(7);
+    public boolean checkRoleAdmin(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        String role = claims.get("auth").toString();
-        if (role.equals(UserRole.CUSTOMER.getAuthority()) || role.equals(UserRole.OWNER.getAuthority()))
-            throw new UserException(ErrorType.NOT_ACCEPTABLE_ROLE_ERROR);
+        String role = claims.get(CLAIMS_ROLE).toString();
+        return role.equals(UserRole.MANAGER.getAuthority()) || role.equals(UserRole.MASTER.getAuthority());
     }
 
 

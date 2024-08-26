@@ -1,5 +1,6 @@
 package com.fstuckint.baedalyogieats.core.api.user.controller.v1;
 
+import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.UserException;
 import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,6 +22,12 @@ public class UserExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleUserException(UserException e) {
         log.error("UserException : {}", e.getMessage(), e);
         return new ResponseEntity<>(ApiResponse.error(e.getErrorType(), e.getData()), e.getErrorType().getStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException e) {
+        log.error("MethodArgumentNotValidException : {}", e.getMessage(), e);
+        return new ResponseEntity<>(ApiResponse.error(ErrorType.NOT_VALID_USERNAME_PASSWORD_ERROR), e.getStatusCode());
     }
 
 }

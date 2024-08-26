@@ -2,6 +2,7 @@ package com.fstuckint.baedalyogieats.core.api.user.domain;
 
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.LoginDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.SignupDto;
+import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.UpdateUserDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.UserInfoDto;
 import com.fstuckint.baedalyogieats.core.api.user.jwt.JwtUtils;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
@@ -10,6 +11,7 @@ import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
 import com.fstuckint.baedalyogieats.storage.db.core.user.User;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,30 +44,31 @@ public class UserService {
         User nicknameCheck = userRepository.findByNickname(signupDto.getNickname()).orElse(null);
         if (nicknameCheck != null) throw new UserException(ErrorType.DUPLICATE_NICKNAME_ERROR);
 
-        validationRole(signupDto);
         String encodedPassword = passwordEncoder.encode(signupDto.getPassword());
-
         userRepository.save(new User(signupDto.getUsername(), encodedPassword, signupDto.getNickname(), signupDto.getUserRole()));
         return ResponseEntity.ok(ApiResponse.success());
     }
 
 
-//    @Transactional(readOnly = true)
-//    public ResponseEntity<ApiResponse<?>> login(LoginDto loginDto) {
-//        User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(() -> new UserException(ErrorType.USERNAME_PASSWORD_BAD_REQUEST_ERROR));
-//        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
-//            throw new UserException(ErrorType.USERNAME_PASSWORD_BAD_REQUEST_ERROR);
-//
-//        String token = jwtUtils.createToken(user.getUsername(), user.getRole());
-//        return ResponseEntity.ok().header(AUTHORIZATION_HEADER, token).body(ApiResponse.success(token));
-//    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse<?>> login(LoginDto loginDto) {
+        User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(() -> new UserException(ErrorType.USERNAME_PASSWORD_BAD_REQUEST_ERROR));
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
+            throw new UserException(ErrorType.USERNAME_PASSWORD_BAD_REQUEST_ERROR);
+
+        String token = jwtUtils.createToken(user.getUsername(), user.getRole());
+        return ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER, token).body(ApiResponse.success(token));
+    }
 
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse<?>> getUserList(String token, LocalDateTime cursor, Pageable pageable, String sortKey, String direction) {
-        jwtUtils.CHECK_ADMIN(token);
-        if (sortKey.isEmpty()) sortKey = "createdAt";
-        if (direction.isEmpty()) direction = "ASC";
+    public ResponseEntity<ApiResponse<?>> getUserList(LocalDateTime cursor, Pageable pageable, String sortKey, String direction, HttpServletRequest request) {
+        String token = jwtUtils.extractToken(request);
+        if (!jwtUtils.validationToken(token)) throw new UserException(ErrorType.TOKEN_ERROR);
+        if (!jwtUtils.checkRoleAdmin(token)) throw new UserException(ErrorType.NOT_ACCEPTABLE_ROLE_ERROR);
+
+        if (sortKey == null) sortKey = "createdAt";
+        if (direction == null) direction = "ASC";
 
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortKey);
         PageRequest sortedPage = PageRequest.of(0, pageable.getPageSize(), sort);
@@ -79,13 +82,27 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<?>> getUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_USER_ERROR));
         return ResponseEntity.ok(ApiResponse.success(new UserInfoDto(user)));
     }
 
-    private void validationRole(SignupDto signupDto) {
-        UserRole userRoleFromDto = signupDto.getUserRole();
-        boolean isValidRole = Arrays.stream(UserRole.values()).anyMatch(role -> role == userRoleFromDto);
-        if (!isValidRole) throw new UserException(ErrorType.NOT_MATCH_ROLE_ERROR);
+    @Transactional
+    public ResponseEntity<ApiResponse<?>> updateUser(Long id, UpdateUserDto updateUserDto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_USER_ERROR));
+
+        User checkNickname = userRepository.findByNickname(updateUserDto.getNickname()).orElse(null);
+        if (checkNickname != null) throw new UserException(ErrorType.DUPLICATE_NICKNAME_ERROR);
+
+        user.updateUserInfo(passwordEncoder.encode(updateUserDto.getPassword()), updateUserDto.getNickname());
+        userRepository.save(user);
+        return ResponseEntity.ok(ApiResponse.success(new UserInfoDto(user)));
+    }
+
+    @Transactional
+    public ResponseEntity<ApiResponse<?>> deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_USER_ERROR));
+        userRepository.delete(user);
+        // 추후 논리적 삭제로 변경
+        return ResponseEntity.ok(ApiResponse.success());
     }
 }

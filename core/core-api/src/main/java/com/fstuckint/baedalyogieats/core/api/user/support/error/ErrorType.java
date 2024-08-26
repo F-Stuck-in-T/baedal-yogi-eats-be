@@ -12,8 +12,9 @@ public enum ErrorType {
 	DUPLICATE_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Duplicate nickname.", LogLevel.ERROR),
 	NOT_MATCH_ROLE_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Not match user role.", LogLevel.ERROR),
 	NOT_ACCEPTABLE_ROLE_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not Acceptable user role", LogLevel.ERROR),
-	NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found user", LogLevel.ERROR),
-	NOT_VALID_TOKEN_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not valid token", LogLevel.ERROR);
+	NOT_FOUND_USER_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found user", LogLevel.ERROR),
+	TOKEN_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not valid or empty token", LogLevel.ERROR),
+	NOT_VALID_USERNAME_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Not valid username and password.", LogLevel.ERROR);
 
 
 
