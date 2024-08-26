@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 import java.util.UUID;
+
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 import org.hibernate.type.SqlTypes;
 
 @MappedSuperclass
+@Getter
 public abstract class BaseEntity {
 
 	@Id
@@ -41,33 +44,5 @@ public abstract class BaseEntity {
 
 	@Column(length = 100)
 	private String deletedBy;
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public String getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public LocalDateTime getDeletedAt() {
-		return deletedAt;
-	}
-
-	public String getDeletedBy() {
-		return deletedBy;
-	}
 
 }
