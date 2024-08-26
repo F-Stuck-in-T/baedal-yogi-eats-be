@@ -33,8 +33,7 @@ public class AddressService {
     @Transactional
     public ResponseEntity<ApiResponse<?>> registerAddress(AddressDto addressDto, HttpServletRequest request) {
         String username = extractUsername(request);
-        userRepository.findByUsername(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-
+        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         addressRepository.save(new Address(addressDto.getAddress(), username));
         return ResponseEntity.ok(ApiResponse.success(addressDto));
     }
@@ -42,10 +41,8 @@ public class AddressService {
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<?>> getAddressList(HttpServletRequest request) {
         String username = extractUsername(request);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!user.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
-
-        List<AddressResponseDto> list = addressRepository.findAllByUsername(username).stream()
+        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        List<AddressResponseDto> list = addressRepository.findAllByUsernameAndIsDeletedFalse(username).stream()
                 .map(AddressResponseDto::new)
                 .toList();
         return ResponseEntity.ok(ApiResponse.success(list));
@@ -54,7 +51,7 @@ public class AddressService {
     @Transactional
     public ResponseEntity<ApiResponse<?>> updateAddress(UUID addressId, AddressDto addressDto, HttpServletRequest request) {
         String username = extractUsername(request);
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
 
         addressRepository.save(address.updateAddress(addressDto.getAddress()));
@@ -64,11 +61,9 @@ public class AddressService {
     @Transactional
     public ResponseEntity<ApiResponse<?>> deleteAddress(UUID addressId, HttpServletRequest request) {
         String username = extractUsername(request);
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
-
-        // 추후 논리적 삭제로 변경
-        addressRepository.delete(address);
+        addressRepository.save(address.deleteAddress());
         return ResponseEntity.ok(ApiResponse.success());
     }
 
@@ -77,9 +72,10 @@ public class AddressService {
         String role = extractRole(request);
         if (UserRole.CUSTOMER.getAuthority().equals(role) || UserRole.OWNER.getAuthority().equals(role))
             throw new AddressException(ErrorType.ROLE_ERROR);
-
         return ResponseEntity.ok(ApiResponse.success(addressRepository.findAll().stream().map(AddressResponseDto::new).toList()));
     }
+
+
 
 
     private String extractUsername(HttpServletRequest request) {
@@ -88,12 +84,9 @@ public class AddressService {
         if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
         return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_USERNAME).toString();
     }
-
     private String extractRole(HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
         return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_ROLE).toString();
     }
-
-
 }

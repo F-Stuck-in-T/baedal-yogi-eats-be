@@ -23,6 +23,8 @@ public class Address extends BaseEntity {
     private String full_address;
     private String username;
 
+    private boolean isDeleted = false;
+
     public Address(String full_address, String username) {
         this.full_address = full_address;
         this.username = username;
@@ -30,6 +32,11 @@ public class Address extends BaseEntity {
 
     public Address updateAddress(String full_address) {
         this.full_address = full_address;
+        return this;
+    }
+
+    public Address deleteAddress() {
+        isDeleted = true;
         return this;
     }
 }

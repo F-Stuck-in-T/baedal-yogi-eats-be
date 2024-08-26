@@ -1,14 +1,13 @@
 package com.fstuckint.baedalyogieats.storage.db.core.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -18,7 +17,7 @@ public class User {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID uuid;
     private String username;
     private String password;
     private String nickname;
@@ -47,14 +46,19 @@ public class User {
     @Column(length = 100)
     private String updatedBy;
 
-    private LocalDateTime deletedAt;
+    private boolean isDeleted = false;
 
-    @Column(length = 100)
-    private String deletedBy;
-
-    public User updateUserInfo(String password, String nickname) {
-        this.password = !password.isEmpty() ? password : this.password;
+    public User updateNickname(String nickname) {
         this.nickname = !nickname.isEmpty() ? nickname : this.nickname;
+        return this;
+    }
+    public User updatePassword(String password) {
+        this.password = !password.isEmpty() ? password : this.password;
+        return this;
+    }
+
+    public User deleteUser() {
+        isDeleted = true;
         return this;
     }
 }

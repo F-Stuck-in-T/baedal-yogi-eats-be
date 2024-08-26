@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -26,37 +27,42 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/sign-up")
+    @PostMapping
     public ResponseEntity<ApiResponse<?>> signUp(@Validated @RequestBody SignupDto signupDto) {
         return userService.signUp(signupDto);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginDto loginDto) {
-        return userService.login(loginDto);
+    @PostMapping("/authorization")
+    public ResponseEntity<ApiResponse<?>> createToken(@RequestBody LoginDto loginDto) {
+        return userService.createToken(loginDto);
+    }
+
+    @DeleteMapping("/token")
+    public ResponseEntity<ApiResponse<?>> deleteToken(HttpServletRequest request) {
+        return userService.deleteToken(request);
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getUsers(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-                                                   @PageableDefault(size = 10) Pageable pageable,
-                                                   @RequestParam(required = false) String sortKey,
-                                                   @RequestParam(required = false) String direction,
+                                                   @RequestParam(defaultValue = "10") Integer limit,
+                                                   @RequestParam(defaultValue = "id") String sortKey,
+                                                   @RequestParam(defaultValue = "ASC") String direction,
                                                    HttpServletRequest request) {
-        return userService.getUserList(cursor, pageable, sortKey, direction, request);
+        return userService.getUserList(cursor, limit, sortKey, direction, request);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<?>> getUser(@PathVariable UUID uuid, HttpServletRequest request) {
+        return userService.getUser(uuid, request);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto updateUserDto) {
-        return userService.updateUser(id, updateUserDto);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto, HttpServletRequest request) {
+        return userService.updateUser(uuid, updateUserDto, request);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid) {
+        return userService.deleteUser(uuid);
     }
 }

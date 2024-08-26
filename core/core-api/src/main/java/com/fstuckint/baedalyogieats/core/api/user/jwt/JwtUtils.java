@@ -1,5 +1,7 @@
 package com.fstuckint.baedalyogieats.core.api.user.jwt;
 
+import com.fstuckint.baedalyogieats.storage.db.core.token.TokenBlacklist;
+import com.fstuckint.baedalyogieats.storage.db.core.token.TokenBlacklistRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,12 +21,15 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtUtils {
 
+    private final TokenBlacklistRepository tokenBlacklistRepository;
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String CLAIMS_USERNAME = "username";
     public static final String CLAIMS_ROLE = "auth";
+
 
     @Value("${spring.application.name}")
     private String issuer;
@@ -54,8 +60,9 @@ public class JwtUtils {
 
     public boolean validationToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            TokenBlacklist blackToken = tokenBlacklistRepository.findByToken(token).orElse(null);
+            return blackToken == null;
         } catch (Exception e) {
             log.error(e.getMessage());
             return false;
@@ -78,6 +85,12 @@ public class JwtUtils {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         String role = claims.get(CLAIMS_ROLE).toString();
         return role.equals(UserRole.MANAGER.getAuthority()) || role.equals(UserRole.MASTER.getAuthority());
+    }
+
+
+    public void addBlacklist(String token) {
+        TokenBlacklist blackToken = new TokenBlacklist(token);
+        tokenBlacklistRepository.save(blackToken);
     }
 
 

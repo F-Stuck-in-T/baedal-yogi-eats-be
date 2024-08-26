@@ -27,7 +27,7 @@ public class UserExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException : {}", e.getMessage(), e);
-        return new ResponseEntity<>(ApiResponse.error(ErrorType.NOT_VALID_USERNAME_PASSWORD_ERROR), e.getStatusCode());
+        return new ResponseEntity<>(ApiResponse.error(ErrorType.BAD_REQUEST_ERROR), e.getStatusCode());
     }
 
 }

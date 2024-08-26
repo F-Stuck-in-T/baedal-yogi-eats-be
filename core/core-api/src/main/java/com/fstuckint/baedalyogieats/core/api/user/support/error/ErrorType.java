@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 public enum ErrorType {
 
 	DEFAULTS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E500, "An unexpected error has occurred.", LogLevel.ERROR),
-	USERNAME_PASSWORD_BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Confirm username and password.", LogLevel.ERROR),
-	DUPLICATE_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Duplicate nickname.", LogLevel.ERROR),
-	NOT_MATCH_ROLE_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Not match user role.", LogLevel.ERROR),
-	NOT_ACCEPTABLE_ROLE_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not Acceptable user role", LogLevel.ERROR),
-	NOT_FOUND_USER_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found user", LogLevel.ERROR),
-	TOKEN_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not valid or empty token", LogLevel.ERROR),
-	NOT_VALID_USERNAME_PASSWORD_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "Not valid username and password.", LogLevel.ERROR);
 
+	BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "bad request.", LogLevel.ERROR),
+
+	ROLE_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not Acceptable user role", LogLevel.ERROR),
+
+	NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found user", LogLevel.ERROR),
+
+	TOKEN_ERROR(HttpStatus.NOT_ACCEPTABLE, ErrorCode.E400, "Not valid or empty token", LogLevel.ERROR);
 
 
 
