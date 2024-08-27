@@ -65,7 +65,7 @@ public class PaymentPilot {
     }
 
     public void cancelPayment(UUID paymentUuid) {
-        PaymentEntity paymentEntity = paymentRepository.findByUuidAndIsDeletedFalse(paymentUuid).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+        PaymentEntity paymentEntity = paymentRepository.findByUuidAndIsCancelFalse(paymentUuid).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
         paymentEntity.cancel();
     }
 }

@@ -18,17 +18,9 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     @Query("select u from UserEntity u where u.isDeleted = false and u.createdAt > :dateCursor")
     Page<UserEntity> findAllUserByIsDeletedFalse(LocalDateTime dateCursor, Pageable pageable);
 
-<<<<<<< HEAD
-    @Query("select u from User u where u.isDeleted = false and u.createdAt > :dateCursor")
-    Page<User> findAllByCursor(LocalDateTime dateCursor, PageRequest sortedPage);
 
-    Optional<User> findByUsernameAndIsDeletedFalse(String username);
-
-    Optional<User> findByUuidAndIsDeletedFalse(UUID uuid);
-=======
     Optional<UserEntity> findByUsernameAndIsDeletedFalse(String username);
     Optional<UserEntity> findByNicknameAndIsDeletedFalse(String nickname);
     Optional<UserEntity> findByUuidAndIsDeletedFalse(UUID uuid);
->>>>>>> feature/tmp
 
 }

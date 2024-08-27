@@ -22,12 +22,8 @@ public class AddressEntity extends BaseEntity {
     private UUID uuid;
 
     private String full_address;
-<<<<<<< HEAD:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/address/Address.java
 
-    private String username;
-=======
     private UUID userUuid;
->>>>>>> feature/tmp:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/address/AddressEntity.java
 
     private boolean isDeleted = false;
 

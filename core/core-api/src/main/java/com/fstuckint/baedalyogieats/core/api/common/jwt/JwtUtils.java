@@ -26,21 +26,10 @@ import java.util.UUID;
 public class JwtUtils {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
-<<<<<<< HEAD:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/user/jwt/JwtUtils.java
-=======
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String CLAIMS_USERNAME = "username";
     public static final String CLAIMS_UUID = "uuid";
-    public static final String CLAIMS_ROLE = "auth";
->>>>>>> feature/tmp:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/common/jwt/JwtUtils.java
-
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
-    public static final String BEARER_PREFIX = "Bearer ";
-
-    public static final String CLAIMS_USERNAME = "username";
-
     public static final String CLAIMS_ROLE = "auth";
 
     @Value("${spring.application.name}")
@@ -62,15 +51,6 @@ public class JwtUtils {
 
     public String createToken(UUID uuid, String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
-<<<<<<< HEAD:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/user/jwt/JwtUtils.java
-            .claim(CLAIMS_USERNAME, username)
-            .claim(CLAIMS_ROLE, role.getAuthority())
-            .signWith(key, SignatureAlgorithm.HS256)
-            .setIssuer(issuer)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + expiration))
-            .compact();
-=======
                 .claim(CLAIMS_UUID, uuid)
                 .claim(CLAIMS_USERNAME, username)
                 .claim(CLAIMS_ROLE, role.getAuthority())
@@ -79,7 +59,6 @@ public class JwtUtils {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .compact();
->>>>>>> feature/tmp:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/common/jwt/JwtUtils.java
     }
 
     public boolean validationToken(String token) {
@@ -117,14 +96,10 @@ public class JwtUtils {
         tokenBlacklistRepository.save(blackToken);
     }
 
-<<<<<<< HEAD:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/user/jwt/JwtUtils.java
-=======
+
     public boolean checkOwner(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         String role = claims.get(CLAIMS_ROLE).toString();
         return role.equals(UserRole.OWNER.getAuthority());
     }
-
-
->>>>>>> feature/tmp:core/core-api/src/main/java/com/fstuckint/baedalyogieats/core/api/common/jwt/JwtUtils.java
 }

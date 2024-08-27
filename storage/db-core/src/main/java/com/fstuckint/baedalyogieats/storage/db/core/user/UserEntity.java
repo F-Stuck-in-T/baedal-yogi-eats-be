@@ -16,13 +16,6 @@ import java.util.UUID;
 @Table(name = "users")
 public class UserEntity extends BaseEntity {
 
-<<<<<<< HEAD:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/user/User.java
-    @Id
-    @GeneratedValue
-    private UUID uuid;
-
-=======
->>>>>>> feature/tmp:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/user/UserEntity.java
     private String username;
 
     private String password;
@@ -44,15 +37,9 @@ public class UserEntity extends BaseEntity {
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
-<<<<<<< HEAD:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/user/User.java
 
-    public User updatePassword(String password) {
-        this.password = !password.isEmpty() ? password : this.password;
-        return this;
-=======
     public void updatePassword(String password) {
         this.password = password;
->>>>>>> feature/tmp:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/user/UserEntity.java
     }
 
     public UserEntity deleteUser() {

@@ -1,12 +1,12 @@
 package com.fstuckint.baedalyogieats.core.api.user.controller.v1;
 
+import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.LoginDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.SignupDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.UpdateUserDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.response.UserPageResponse;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.response.UserResponse;
 import com.fstuckint.baedalyogieats.core.api.user.domain.UserService;
-import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
 import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +46,6 @@ public class UserController {
     }
 
     @GetMapping
-<<<<<<< HEAD
-    public ResponseEntity<ApiResponse<?>> getUsers(
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-            @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
-        return userService.getUserList(cursor, limit, sortKey, direction, request);
-=======
     public ResponseEntity<ApiResponse<?>> getUsers(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
                                                    @RequestParam(defaultValue = "10") Integer limit,
                                                    @RequestParam(defaultValue = "createdAt") String sortKey,
@@ -60,7 +53,7 @@ public class UserController {
                                                    HttpServletRequest request) {
         UserPageResponse data = userService.getUserList(cursor, limit, sortKey, direction, request);
         return ResponseEntity.ok(ApiResponse.success(data));
->>>>>>> feature/tmp
+
     }
 
     @GetMapping("/{uuid}")
@@ -70,15 +63,11 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-<<<<<<< HEAD
-    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
-            HttpServletRequest request) {
-        return userService.updateUser(uuid, updateUserDto, request);
-=======
+
     public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto, HttpServletRequest request) {
         UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, request));
         return ResponseEntity.ok(ApiResponse.success(data));
->>>>>>> feature/tmp
+
     }
 
     @DeleteMapping("/{uuid}")

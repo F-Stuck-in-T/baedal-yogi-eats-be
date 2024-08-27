@@ -70,8 +70,6 @@ public class PaymentService {
         paymentPilot.cancelPayment(paymentUuid);
     }
 
-
-
     private static PageRequest getSortedPage(Integer limit, String sortKey, String direction) {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortKey);
         return PageRequest.of(0, limit, sort);
