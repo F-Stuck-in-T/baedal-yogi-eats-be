@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExampleOrderService {
 
-	public ExampleResult processExample(ExampleData exampleData) {
-		return new ExampleResult(exampleData.value());
-	}
+    public ExampleResult processExample(ExampleData exampleData) {
+        return new ExampleResult(exampleData.value());
+    }
 
 }

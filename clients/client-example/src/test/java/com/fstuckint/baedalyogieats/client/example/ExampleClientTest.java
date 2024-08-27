@@ -10,20 +10,20 @@ import org.junit.jupiter.api.Test;
 
 public class ExampleClientTest extends ClientExampleContextTest {
 
-	private final ExampleClient exampleClient;
+    private final ExampleClient exampleClient;
 
-	public ExampleClientTest(ExampleClient exampleClient) {
-		this.exampleClient = exampleClient;
-	}
+    public ExampleClientTest(ExampleClient exampleClient) {
+        this.exampleClient = exampleClient;
+    }
 
-	@Test
-	public void shouldBeThrownExceptionWhenExample() {
-		try {
-			exampleClient.example("HELLO!");
-		}
-		catch (Exception e) {
-			assertThat(e).isExactlyInstanceOf(RetryableException.class);
-		}
-	}
+    @Test
+    public void shouldBeThrownExceptionWhenExample() {
+        try {
+            exampleClient.example("HELLO!");
+        }
+        catch (Exception e) {
+            assertThat(e).isExactlyInstanceOf(RetryableException.class);
+        }
+    }
 
 }

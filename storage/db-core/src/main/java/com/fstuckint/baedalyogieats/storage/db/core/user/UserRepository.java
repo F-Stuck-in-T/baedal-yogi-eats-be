@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.storage.db.core.user;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,8 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Page<User> findAllByCursor(LocalDateTime dateCursor, PageRequest sortedPage);
 
     Optional<User> findByUsernameAndIsDeletedFalse(String username);
+
     Optional<User> findByUuidAndIsDeletedFalse(UUID uuid);
-
-
 
 }

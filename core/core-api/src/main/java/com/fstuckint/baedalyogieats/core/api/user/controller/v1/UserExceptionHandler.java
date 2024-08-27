@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice(basePackages = "com.fstuckint.baedalyogieats.core.api.user")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class UserExceptionHandler {
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(UserException.class)

@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public record ProductResponse(UUID uuid, String name, String description, int unitPrice, UUID storeUuid) {
 
-	public static ProductResponse of(ProductResult productResult) {
-		return new ProductResponse(productResult.uuid(), productResult.name(), productResult.description(),
-				productResult.unitPrice(), productResult.storeUuid());
-	}
+    public static ProductResponse of(ProductResult productResult) {
+        return new ProductResponse(productResult.uuid(), productResult.name(), productResult.description(),
+                productResult.unitPrice(), productResult.storeUuid());
+    }
 }

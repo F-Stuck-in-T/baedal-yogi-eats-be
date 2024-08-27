@@ -18,45 +18,45 @@ import org.springframework.test.util.ReflectionTestUtils;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ProductFinderTest {
 
-	private UUID productUuid;
+    private UUID productUuid;
 
-	private UUID storeUuid;
+    private UUID storeUuid;
 
-	@Mock
-	private ProductRepository productRepository;
+    @Mock
+    private ProductRepository productRepository;
 
-	private ProductFinder productFinder;
+    private ProductFinder productFinder;
 
-	@BeforeEach
-	void setUp() {
-		this.productUuid = UUID.randomUUID();
-		this.storeUuid = UUID.randomUUID();
+    @BeforeEach
+    void setUp() {
+        this.productUuid = UUID.randomUUID();
+        this.storeUuid = UUID.randomUUID();
 
-		MockitoAnnotations.openMocks(this);
-		productFinder = new ProductFinder(productRepository);
-	}
+        MockitoAnnotations.openMocks(this);
+        productFinder = new ProductFinder(productRepository);
+    }
 
-	@Test
-	void 상품을_조회한다() {
-		// given
-		String name = "상품";
-		String description = "상품 설명";
-		int unitPrice = 10_000;
-		Product product = new Product(name, description, unitPrice, storeUuid);
-		ProductEntity productEntity = product.toEntity();
-		ReflectionTestUtils.setField(productEntity, "uuid", productUuid);
-		when(productRepository.findByUuid(productUuid)).thenReturn(Optional.of(productEntity));
+    @Test
+    void 상품을_조회한다() {
+        // given
+        String name = "상품";
+        String description = "상품 설명";
+        int unitPrice = 10_000;
+        Product product = new Product(name, description, unitPrice, storeUuid);
+        ProductEntity productEntity = product.toEntity();
+        ReflectionTestUtils.setField(productEntity, "uuid", productUuid);
+        when(productRepository.findByUuid(productUuid)).thenReturn(Optional.of(productEntity));
 
-		// when
-		ProductResult result = productFinder.find(productUuid);
+        // when
+        ProductResult result = productFinder.find(productUuid);
 
-		// then
-		assertThat(result).isNotNull();
-		assertThat(result.uuid()).isEqualTo(productUuid);
-		assertThat(result.name()).isEqualTo(name);
-		assertThat(result.description()).isEqualTo(description);
-		assertThat(result.unitPrice()).isEqualTo(unitPrice);
-		assertThat(result.storeUuid()).isEqualTo(storeUuid);
-	}
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.uuid()).isEqualTo(productUuid);
+        assertThat(result.name()).isEqualTo(name);
+        assertThat(result.description()).isEqualTo(description);
+        assertThat(result.unitPrice()).isEqualTo(unitPrice);
+        assertThat(result.storeUuid()).isEqualTo(storeUuid);
+    }
 
 }

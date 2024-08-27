@@ -10,42 +10,42 @@ import java.util.UUID;
 @Table(name = "p_products")
 public class ProductEntity extends BaseEntity {
 
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String name;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-	@Column(nullable = false)
-	private int unitPrice;
+    @Column(nullable = false)
+    private int unitPrice;
 
-	@Column(nullable = false)
-	private UUID storeUuid;
+    @Column(nullable = false)
+    private UUID storeUuid;
 
-	public ProductEntity() {
-	}
+    public ProductEntity() {
+    }
 
-	public ProductEntity(String name, String description, int unitPrice, UUID storeUuid) {
-		this.name = name;
-		this.description = description;
-		this.unitPrice = unitPrice;
-		this.storeUuid = storeUuid;
-	}
+    public ProductEntity(String name, String description, int unitPrice, UUID storeUuid) {
+        this.name = name;
+        this.description = description;
+        this.unitPrice = unitPrice;
+        this.storeUuid = storeUuid;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public int getUnitPrice() {
-		return unitPrice;
-	}
+    public int getUnitPrice() {
+        return unitPrice;
+    }
 
-	public UUID getStoreUuid() {
-		return storeUuid;
-	}
+    public UUID getStoreUuid() {
+        return storeUuid;
+    }
 
 }

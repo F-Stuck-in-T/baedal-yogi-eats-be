@@ -6,21 +6,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-	private final ProductRegister productRegister;
+    private final ProductRegister productRegister;
 
-	private final ProductFinder productFinder;
+    private final ProductFinder productFinder;
 
-	public ProductService(ProductRegister productRegister, ProductFinder productFinder) {
-		this.productRegister = productRegister;
-		this.productFinder = productFinder;
-	}
+    public ProductService(ProductRegister productRegister, ProductFinder productFinder) {
+        this.productRegister = productRegister;
+        this.productFinder = productFinder;
+    }
 
-	public ProductResult register(Product product) {
-		return productRegister.add(product);
-	}
+    public ProductResult register(Product product) {
+        return productRegister.add(product);
+    }
 
-	public ProductResult find(UUID productUuid) {
-		return productFinder.find(productUuid);
-	}
+    public ProductResult find(UUID productUuid) {
+        return productFinder.find(productUuid);
+    }
 
 }

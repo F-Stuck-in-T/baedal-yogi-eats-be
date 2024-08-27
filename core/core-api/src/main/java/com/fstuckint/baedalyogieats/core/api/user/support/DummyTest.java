@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.user.support;
 
-
 import com.fstuckint.baedalyogieats.storage.db.core.user.User;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
@@ -25,7 +24,7 @@ public class DummyTest {
             list.add(new User("consumer" + i, "password", "consumer" + i, UserRole.CUSTOMER));
         }
         for (int i = 0; i < 30; i++) {
-               list.add(new User("owner" + i, "password", "owner" + i, UserRole.OWNER));
+            list.add(new User("owner" + i, "password", "owner" + i, UserRole.OWNER));
         }
         for (int i = 0; i < 30; i++) {
             list.add(new User("manager" + i, "password", "manager" + i, UserRole.MANAGER));
@@ -33,4 +32,5 @@ public class DummyTest {
 
         userRepository.saveAll(list);
     }
+
 }

@@ -20,29 +20,29 @@ import org.hibernate.type.SqlTypes;
 @Getter
 public abstract class BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	@JdbcTypeCode(SqlTypes.BINARY)
-	@Column(columnDefinition = "BINARY(16)")
-	private UUID uuid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(SqlTypes.BINARY)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID uuid;
 
-	@CreationTimestamp
-	@Column
-	private LocalDateTime createdAt;
+    @CreationTimestamp
+    @Column
+    private LocalDateTime createdAt;
 
-	@Column(length = 100)
-	private String createdBy;
+    @Column(length = 100)
+    private String createdBy;
 
-	@UpdateTimestamp
-	@Column
-	private LocalDateTime updatedAt;
+    @UpdateTimestamp
+    @Column
+    private LocalDateTime updatedAt;
 
-	@Column(length = 100)
-	private String updatedBy;
+    @Column(length = 100)
+    private String updatedBy;
 
-	private LocalDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
-	@Column(length = 100)
-	private String deletedBy;
+    @Column(length = 100)
+    private String deletedBy;
 
 }

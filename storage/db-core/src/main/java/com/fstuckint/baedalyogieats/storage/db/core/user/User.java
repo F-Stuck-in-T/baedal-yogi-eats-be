@@ -18,8 +18,11 @@ public class User {
     @Id
     @GeneratedValue
     private UUID uuid;
+
     private String username;
+
     private String password;
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -52,6 +55,7 @@ public class User {
         this.nickname = !nickname.isEmpty() ? nickname : this.nickname;
         return this;
     }
+
     public User updatePassword(String password) {
         this.password = !password.isEmpty() ? password : this.password;
         return this;
@@ -61,4 +65,5 @@ public class User {
         isDeleted = true;
         return this;
     }
+
 }

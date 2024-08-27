@@ -17,10 +17,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Address extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     private String full_address;
+
     private String username;
 
     private boolean isDeleted = false;
@@ -39,4 +41,5 @@ public class Address extends BaseEntity {
         isDeleted = true;
         return this;
     }
+
 }

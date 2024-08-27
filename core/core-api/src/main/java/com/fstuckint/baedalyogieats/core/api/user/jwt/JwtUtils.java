@@ -25,21 +25,25 @@ import java.util.Date;
 public class JwtUtils {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final String CLAIMS_USERNAME = "username";
-    public static final String CLAIMS_ROLE = "auth";
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    public static final String BEARER_PREFIX = "Bearer ";
+
+    public static final String CLAIMS_USERNAME = "username";
+
+    public static final String CLAIMS_ROLE = "auth";
 
     @Value("${spring.application.name}")
     private String issuer;
+
     @Value("${jwt.secretKey}")
     private String secretKey;
+
     @Value("${jwt.expiration}")
     private Long expiration;
 
     private Key key;
-
 
     @PostConstruct
     public void init() {
@@ -49,13 +53,13 @@ public class JwtUtils {
 
     public String createToken(String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
-                .claim(CLAIMS_USERNAME, username)
-                .claim(CLAIMS_ROLE, role.getAuthority())
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setIssuer(issuer)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .compact();
+            .claim(CLAIMS_USERNAME, username)
+            .claim(CLAIMS_ROLE, role.getAuthority())
+            .signWith(key, SignatureAlgorithm.HS256)
+            .setIssuer(issuer)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .compact();
     }
 
     public boolean validationToken(String token) {
@@ -63,7 +67,8 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             TokenBlacklist blackToken = tokenBlacklistRepository.findByToken(token).orElse(null);
             return blackToken == null;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error(e.getMessage());
             return false;
         }
@@ -87,11 +92,9 @@ public class JwtUtils {
         return role.equals(UserRole.MANAGER.getAuthority()) || role.equals(UserRole.MASTER.getAuthority());
     }
 
-
     public void addBlacklist(String token) {
         TokenBlacklist blackToken = new TokenBlacklist(token);
         tokenBlacklistRepository.save(blackToken);
     }
-
 
 }

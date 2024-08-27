@@ -15,24 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProductController {
 
-	private final ProductService productService;
+    private final ProductService productService;
 
-	public ProductController(ProductService productService) {
-		this.productService = productService;
-	}
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
-	// TODO: 다중 상품 등록 기능
-	// TODO: 가게 UUID 유효성 검사
-	@PostMapping("/api/v1/products")
-	public ApiResponse<ProductResponse> registerProduct(@RequestBody ProductRegisterRequest request) {
-		ProductResult result = productService.register(request.toProduct());
-		return ApiResponse.success(ProductResponse.of(result));
-	}
+    // TODO: 다중 상품 등록 기능
+    // TODO: 가게 UUID 유효성 검사
+    @PostMapping("/api/v1/products")
+    public ApiResponse<ProductResponse> registerProduct(@RequestBody ProductRegisterRequest request) {
+        ProductResult result = productService.register(request.toProduct());
+        return ApiResponse.success(ProductResponse.of(result));
+    }
 
-	@GetMapping("/api/v1/products/{productUuid}")
-	public ApiResponse<ProductResponse> findProduct(@PathVariable String productUuid) {
-		ProductResult result = productService.find(UUID.fromString(productUuid));
-		return ApiResponse.success(ProductResponse.of(result));
-	}
+    @GetMapping("/api/v1/products/{productUuid}")
+    public ApiResponse<ProductResponse> findProduct(@PathVariable String productUuid) {
+        ProductResult result = productService.find(UUID.fromString(productUuid));
+        return ApiResponse.success(ProductResponse.of(result));
+    }
 
 }

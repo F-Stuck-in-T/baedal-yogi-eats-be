@@ -9,10 +9,12 @@ import java.util.UUID;
 public class AddressResponseDto {
 
     private UUID uuid;
+
     private String fullAddress;
 
     public AddressResponseDto(Address address) {
         uuid = address.getUuid();
         fullAddress = address.getFull_address();
     }
+
 }

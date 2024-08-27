@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, UUID> {
 
-	default ProductEntity add(ProductEntity productEntity) {
-		return save(productEntity);
-	}
+    default ProductEntity add(ProductEntity productEntity) {
+        return save(productEntity);
+    }
 
-	Optional<ProductEntity> findByUuid(UUID uuid);
+    Optional<ProductEntity> findByUuid(UUID uuid);
 
 }

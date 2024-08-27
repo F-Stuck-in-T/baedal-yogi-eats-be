@@ -6,18 +6,18 @@ import jakarta.persistence.Entity;
 @Entity
 public class ExampleEntity extends BaseEntity {
 
-	@Column
-	private String exampleColumn;
+    @Column
+    private String exampleColumn;
 
-	public ExampleEntity() {
-	}
+    public ExampleEntity() {
+    }
 
-	public ExampleEntity(String exampleColumn) {
-		this.exampleColumn = exampleColumn;
-	}
+    public ExampleEntity(String exampleColumn) {
+        this.exampleColumn = exampleColumn;
+    }
 
-	public String getExampleColumn() {
-		return exampleColumn;
-	}
+    public String getExampleColumn() {
+        return exampleColumn;
+    }
 
 }

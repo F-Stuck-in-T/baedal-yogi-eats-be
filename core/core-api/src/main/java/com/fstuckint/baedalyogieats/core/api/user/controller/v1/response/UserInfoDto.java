@@ -10,7 +10,9 @@ import java.util.UUID;
 public class UserInfoDto {
 
     private UUID userId;
+
     private String nickname;
+
     private String userRole;
 
     public UserInfoDto(User user) {
@@ -18,4 +20,5 @@ public class UserInfoDto {
         this.nickname = user.getNickname();
         this.userRole = user.getRole().getAuthority();
     }
+
 }

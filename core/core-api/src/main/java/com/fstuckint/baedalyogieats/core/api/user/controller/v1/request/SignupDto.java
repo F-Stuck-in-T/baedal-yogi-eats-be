@@ -12,11 +12,13 @@ public class SignupDto {
     @Size(min = 4, max = 10, message = "Username must be between 4 and 10 characters.")
     @Pattern(regexp = "^[a-z0-9]+$")
     private String username;
+
     @Size(min = 8, max = 15, message = "Password must be between 8 and 15 characters.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$")
     private String password;
 
     private String nickname;
+
     private UserRole userRole;
 
 }

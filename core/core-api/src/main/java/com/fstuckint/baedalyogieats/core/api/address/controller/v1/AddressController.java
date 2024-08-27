@@ -18,7 +18,8 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> registerAddress(@RequestBody AddressDto addressDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> registerAddress(@RequestBody AddressDto addressDto,
+            HttpServletRequest request) {
         return addressService.registerAddress(addressDto, request);
     }
 
@@ -31,8 +32,10 @@ public class AddressController {
     public ResponseEntity<ApiResponse<?>> getAdminList(HttpServletRequest request) {
         return addressService.getAdminList(request);
     }
+
     @PutMapping("/{addressId}")
-    public ResponseEntity<ApiResponse<?>> updateAddress(@PathVariable UUID addressId, @RequestBody AddressDto addressDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateAddress(@PathVariable UUID addressId,
+            @RequestBody AddressDto addressDto, HttpServletRequest request) {
         return addressService.updateAddress(addressId, addressDto, request);
     }
 
@@ -40,6 +43,5 @@ public class AddressController {
     public ResponseEntity<ApiResponse<?>> deleteAddress(@PathVariable UUID addressId, HttpServletRequest request) {
         return addressService.deleteAddress(addressId, request);
     }
-
 
 }

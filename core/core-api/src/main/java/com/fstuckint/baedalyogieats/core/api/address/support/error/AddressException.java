@@ -22,4 +22,3 @@ public class AddressException extends RuntimeException {
     }
 
 }
-

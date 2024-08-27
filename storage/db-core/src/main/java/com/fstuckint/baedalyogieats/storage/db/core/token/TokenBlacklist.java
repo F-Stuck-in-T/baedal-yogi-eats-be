@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.storage.db.core.token;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,4 +26,5 @@ public class TokenBlacklist {
     public TokenBlacklist(String token) {
         this.token = token;
     }
+
 }

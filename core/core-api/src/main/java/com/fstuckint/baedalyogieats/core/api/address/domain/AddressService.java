@@ -27,13 +27,16 @@ import java.util.UUID;
 public class AddressService {
 
     private final AddressRepository addressRepository;
+
     private final UserRepository userRepository;
+
     private final JwtUtils jwtUtils;
 
     @Transactional
     public ResponseEntity<ApiResponse<?>> registerAddress(AddressDto addressDto, HttpServletRequest request) {
         String username = extractUsername(request);
-        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        userRepository.findByUsernameAndIsDeletedFalse(username)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         addressRepository.save(new Address(addressDto.getAddress(), username));
         return ResponseEntity.ok(ApiResponse.success(addressDto));
     }
@@ -41,18 +44,23 @@ public class AddressService {
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse<?>> getAddressList(HttpServletRequest request) {
         String username = extractUsername(request);
-        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        List<AddressResponseDto> list = addressRepository.findAllByUsernameAndIsDeletedFalse(username).stream()
-                .map(AddressResponseDto::new)
-                .toList();
+        userRepository.findByUsernameAndIsDeletedFalse(username)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        List<AddressResponseDto> list = addressRepository.findAllByUsernameAndIsDeletedFalse(username)
+            .stream()
+            .map(AddressResponseDto::new)
+            .toList();
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 
     @Transactional
-    public ResponseEntity<ApiResponse<?>> updateAddress(UUID addressId, AddressDto addressDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateAddress(UUID addressId, AddressDto addressDto,
+            HttpServletRequest request) {
         String username = extractUsername(request);
-        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
+        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        if (!address.getUsername().equals(username))
+            throw new AddressException(ErrorType.TOKEN_ERROR);
 
         addressRepository.save(address.updateAddress(addressDto.getAddress()));
         return ResponseEntity.ok(ApiResponse.success());
@@ -61,8 +69,10 @@ public class AddressService {
     @Transactional
     public ResponseEntity<ApiResponse<?>> deleteAddress(UUID addressId, HttpServletRequest request) {
         String username = extractUsername(request);
-        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
+        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        if (!address.getUsername().equals(username))
+            throw new AddressException(ErrorType.TOKEN_ERROR);
         addressRepository.save(address.deleteAddress());
         return ResponseEntity.ok(ApiResponse.success());
     }
@@ -72,21 +82,23 @@ public class AddressService {
         String role = extractRole(request);
         if (UserRole.CUSTOMER.getAuthority().equals(role) || UserRole.OWNER.getAuthority().equals(role))
             throw new AddressException(ErrorType.ROLE_ERROR);
-        return ResponseEntity.ok(ApiResponse.success(addressRepository.findAll().stream().map(AddressResponseDto::new).toList()));
+        return ResponseEntity
+            .ok(ApiResponse.success(addressRepository.findAll().stream().map(AddressResponseDto::new).toList()));
     }
-
-
-
 
     private String extractUsername(HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         log.debug("token: {}", token);
-        if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
+        if (token == null || !jwtUtils.validationToken(token))
+            throw new AddressException(ErrorType.TOKEN_ERROR);
         return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_USERNAME).toString();
     }
+
     private String extractRole(HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
+        if (token == null || !jwtUtils.validationToken(token))
+            throw new AddressException(ErrorType.TOKEN_ERROR);
         return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_ROLE).toString();
     }
+
 }

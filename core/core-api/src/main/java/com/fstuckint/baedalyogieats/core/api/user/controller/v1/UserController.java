@@ -43,11 +43,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getUsers(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-                                                   @RequestParam(defaultValue = "10") Integer limit,
-                                                   @RequestParam(defaultValue = "id") String sortKey,
-                                                   @RequestParam(defaultValue = "ASC") String direction,
-                                                   HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> getUsers(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
+            @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
+            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
         return userService.getUserList(cursor, limit, sortKey, direction, request);
     }
 
@@ -57,7 +56,8 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
+            HttpServletRequest request) {
         return userService.updateUser(uuid, updateUserDto, request);
     }
 
@@ -65,4 +65,5 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid) {
         return userService.deleteUser(uuid);
     }
+
 }
