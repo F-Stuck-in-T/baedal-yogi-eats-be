@@ -15,29 +15,33 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address extends BaseEntity {
+public class AddressEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     private String full_address;
+<<<<<<< HEAD:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/address/Address.java
 
     private String username;
+=======
+    private UUID userUuid;
+>>>>>>> feature/tmp:storage/db-core/src/main/java/com/fstuckint/baedalyogieats/storage/db/core/address/AddressEntity.java
 
     private boolean isDeleted = false;
 
-    public Address(String full_address, String username) {
+    public AddressEntity(String full_address, UUID userUuid) {
         this.full_address = full_address;
-        this.username = username;
+        this.userUuid = userUuid;
     }
 
-    public Address updateAddress(String full_address) {
+    public AddressEntity updateAddress(String full_address) {
         this.full_address = full_address;
         return this;
     }
 
-    public Address deleteAddress() {
+    public AddressEntity deleteAddress() {
         isDeleted = true;
         return this;
     }

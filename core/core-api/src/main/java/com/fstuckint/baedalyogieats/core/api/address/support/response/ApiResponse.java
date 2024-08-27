@@ -2,7 +2,9 @@ package com.fstuckint.baedalyogieats.core.api.address.support.response;
 
 import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorMessage;
 import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorType;
+import lombok.Getter;
 
+@Getter
 public class ApiResponse<S> {
 
     private final ResultType result;
@@ -32,17 +34,4 @@ public class ApiResponse<S> {
     public static ApiResponse<?> error(ErrorType error, Object errorData) {
         return new ApiResponse<>(ResultType.ERROR, null, new ErrorMessage(error, errorData));
     }
-
-    public ResultType getResult() {
-        return result;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public ErrorMessage getError() {
-        return error;
-    }
-
 }
