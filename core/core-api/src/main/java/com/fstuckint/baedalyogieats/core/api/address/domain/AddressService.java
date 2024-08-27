@@ -1,16 +1,13 @@
 package com.fstuckint.baedalyogieats.core.api.address.domain;
 
-import com.fstuckint.baedalyogieats.core.api.address.controller.v1.request.AddressDto;
-import com.fstuckint.baedalyogieats.core.api.address.controller.v1.response.AddressResponseDto;
+import com.fstuckint.baedalyogieats.core.api.address.controller.v1.request.AddressRequest;
+import com.fstuckint.baedalyogieats.core.api.address.controller.v1.response.AddressResponse;
 import com.fstuckint.baedalyogieats.core.api.address.support.error.AddressException;
 import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorType;
-import com.fstuckint.baedalyogieats.core.api.user.jwt.JwtUtils;
+import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
+import com.fstuckint.baedalyogieats.core.api.common.jwt.UserChecker;
 import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
-import com.fstuckint.baedalyogieats.storage.db.core.address.Address;
-import com.fstuckint.baedalyogieats.storage.db.core.address.AddressRepository;
-import com.fstuckint.baedalyogieats.storage.db.core.user.User;
-import com.fstuckint.baedalyogieats.storage.db.core.user.UserRepository;
-import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
+import com.fstuckint.baedalyogieats.storage.db.core.address.AddressEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,67 +23,62 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AddressService {
 
-    private final AddressRepository addressRepository;
-    private final UserRepository userRepository;
+    private final UserChecker userChecker;
+    private final AddressPilot addressPilot;
+
     private final JwtUtils jwtUtils;
 
     @Transactional
-    public ResponseEntity<ApiResponse<?>> registerAddress(AddressDto addressDto, HttpServletRequest request) {
-        String username = extractUsername(request);
-        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        addressRepository.save(new Address(addressDto.getAddress(), username));
-        return ResponseEntity.ok(ApiResponse.success(addressDto));
+    public AddressResponse registerAddress(AddressRequest addressRequest, HttpServletRequest request) {
+        String token = jwtUtils.extractToken(request);
+        userChecker.checkTokenValid(token);
+        userChecker.checkTokenNotOwner(token);
+        AddressResult addressResult = addressPilot.registerAddress(token, addressRequest);
+        return AddressResponse.of(addressResult);
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse<?>> getAddressList(HttpServletRequest request) {
-        String username = extractUsername(request);
-        userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        List<AddressResponseDto> list = addressRepository.findAllByUsernameAndIsDeletedFalse(username).stream()
-                .map(AddressResponseDto::new)
+    public List<AddressResponse> getAddressListByUser(UUID userUuid, HttpServletRequest request) {
+        String token = jwtUtils.extractToken(request);
+        userChecker.checkTokenValid(token);
+        userChecker.checkTokenNotOwner(token);
+        return addressPilot.getAddressListByUser(token, userUuid)
+                .stream()
+                .map(AddressResponse::of)
                 .toList();
-        return ResponseEntity.ok(ApiResponse.success(list));
-    }
-
-    @Transactional
-    public ResponseEntity<ApiResponse<?>> updateAddress(UUID addressId, AddressDto addressDto, HttpServletRequest request) {
-        String username = extractUsername(request);
-        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
-
-        addressRepository.save(address.updateAddress(addressDto.getAddress()));
-        return ResponseEntity.ok(ApiResponse.success());
-    }
-
-    @Transactional
-    public ResponseEntity<ApiResponse<?>> deleteAddress(UUID addressId, HttpServletRequest request) {
-        String username = extractUsername(request);
-        Address address = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!address.getUsername().equals(username)) throw new AddressException(ErrorType.TOKEN_ERROR);
-        addressRepository.save(address.deleteAddress());
-        return ResponseEntity.ok(ApiResponse.success());
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse<?>> getAdminList(HttpServletRequest request) {
-        String role = extractRole(request);
-        if (UserRole.CUSTOMER.getAuthority().equals(role) || UserRole.OWNER.getAuthority().equals(role))
-            throw new AddressException(ErrorType.ROLE_ERROR);
-        return ResponseEntity.ok(ApiResponse.success(addressRepository.findAll().stream().map(AddressResponseDto::new).toList()));
-    }
-
-
-
-
-    private String extractUsername(HttpServletRequest request) {
+    public List<AddressResponse> getAddressListByAdmin(HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        log.debug("token: {}", token);
-        if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
-        return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_USERNAME).toString();
+        userChecker.checkTokenValid(token);
+        if (!userChecker.checkAdmin(token)) throw new AddressException(ErrorType.ROLE_ERROR);
+        return addressPilot.getAddressListByAdmin()
+                .stream()
+                .map(AddressResponse::of)
+                .toList();
     }
-    private String extractRole(HttpServletRequest request) {
+
+    @Transactional
+    public AddressResponse updateAddress(UUID addressId, AddressRequest addressRequest, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        if (token == null || !jwtUtils.validationToken(token)) throw new AddressException(ErrorType.TOKEN_ERROR);
-        return jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_ROLE).toString();
+        userChecker.checkTokenValid(token);
+        if (!userChecker.checkAdmin(token)) { userChecker.checkIdentityByUserUuid(token, addressRequest.userUuid()); };
+        return AddressResponse.of(addressPilot.updateAddress(addressId, addressRequest));
     }
+
+    @Transactional
+    public void deleteAddress(UUID addressId, HttpServletRequest request) {
+        String token = jwtUtils.extractToken(request);
+        userChecker.checkTokenValid(token);
+        if (!userChecker.checkAdmin(token)) { addressPilot.checkIdentity(token, addressId); }
+
+        addressPilot.deleteAddress(addressId);
+    }
+
+
+
+
+
+
 }

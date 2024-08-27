@@ -5,41 +5,44 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorType {
 
-	DEFAULT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E500, "An unexpected error has occurred.", LogLevel.ERROR),
-	TOKEN_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Token Error.", LogLevel.ERROR),
-	NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found data.", LogLevel.ERROR),
-	ROLE_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Not valid role.", LogLevel.ERROR);
+    DEFAULT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.E500, "An unexpected error has occurred.", LogLevel.ERROR),
 
-	private final HttpStatus status;
+    BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "bad request.", LogLevel.ERROR),
+    TOKEN_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Token Error.", LogLevel.ERROR),
+    NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found data.", LogLevel.ERROR),
+    ROLE_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Not valid role.", LogLevel.ERROR);
 
-	private final ErrorCode code;
 
-	private final String message;
+    private final HttpStatus status;
 
-	private final LogLevel logLevel;
+    private final ErrorCode code;
 
-	ErrorType(HttpStatus status, ErrorCode code, String message, LogLevel logLevel) {
+    private final String message;
 
-		this.status = status;
-		this.code = code;
-		this.message = message;
-		this.logLevel = logLevel;
-	}
+    private final LogLevel logLevel;
 
-	public HttpStatus getStatus() {
-		return status;
-	}
+    ErrorType(HttpStatus status, ErrorCode code, String message, LogLevel logLevel) {
 
-	public ErrorCode getCode() {
-		return code;
-	}
+        this.status = status;
+        this.code = code;
+        this.message = message;
+        this.logLevel = logLevel;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public HttpStatus getStatus() {
+        return status;
+    }
 
-	public LogLevel getLogLevel() {
-		return logLevel;
-	}
+    public ErrorCode getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public LogLevel getLogLevel() {
+        return logLevel;
+    }
 
 }

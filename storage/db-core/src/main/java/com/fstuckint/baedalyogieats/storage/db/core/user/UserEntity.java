@@ -1,5 +1,6 @@
 package com.fstuckint.baedalyogieats.storage.db.core.user;
 
+import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,8 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+public class UserEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    private UUID uuid;
     private String username;
     private String password;
     private String nickname;
@@ -25,39 +23,23 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String username, String password, String nickname, UserRole role) {
+    public UserEntity(String username, String password, String nickname, UserRole role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
     }
 
-    @CreationTimestamp
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column(length = 100)
-    private String createdBy;
-
-    @UpdateTimestamp
-    @Column
-    private LocalDateTime updatedAt;
-
-    @Column(length = 100)
-    private String updatedBy;
-
     private boolean isDeleted = false;
 
-    public User updateNickname(String nickname) {
-        this.nickname = !nickname.isEmpty() ? nickname : this.nickname;
-        return this;
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
-    public User updatePassword(String password) {
-        this.password = !password.isEmpty() ? password : this.password;
-        return this;
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
-    public User deleteUser() {
+    public UserEntity deleteUser() {
         isDeleted = true;
         return this;
     }
