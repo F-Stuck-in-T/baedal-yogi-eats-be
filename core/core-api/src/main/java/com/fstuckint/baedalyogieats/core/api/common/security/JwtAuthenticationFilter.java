@@ -24,6 +24,7 @@ import java.util.UUID;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private final JwtUtils jwtUtils;
 
     public JwtAuthenticationFilter(JwtUtils jwtUtils) {
@@ -32,7 +33,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         try {
             log.info("authentication filter run");
 
@@ -44,23 +46,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             log.info("authentication filter username: {}", username);
             log.info("authentication filter password: {}", password);
 
-            return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            password,
-                            null
-                    )
-            );
-        } catch (Exception e) {
+            return getAuthenticationManager()
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password, null));
+        }
+        catch (Exception e) {
             log.error(e.getMessage());
             try {
                 response.setContentType("application/json");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-                String jsonResponse = new ObjectMapper().writeValueAsString(ApiResponse.error(ErrorType.BAD_REQUEST_ERROR));
+                String jsonResponse = new ObjectMapper()
+                    .writeValueAsString(ApiResponse.error(ErrorType.BAD_REQUEST_ERROR));
                 response.getWriter().write(jsonResponse);
                 response.getWriter().flush();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 log.error(ex.getMessage());
                 throw new RuntimeException("Server Error");
             }
@@ -69,7 +69,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+            Authentication authResult) throws IOException {
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UUID userUuid = ((UserDetailsImpl) authResult.getPrincipal()).getUserUuid();
         UserRole role = ((UserDetailsImpl) authResult.getPrincipal()).getUserEntity().getRole();
@@ -87,7 +88,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
         throw new UserException(ErrorType.BAD_REQUEST_ERROR);
     }
+
 }

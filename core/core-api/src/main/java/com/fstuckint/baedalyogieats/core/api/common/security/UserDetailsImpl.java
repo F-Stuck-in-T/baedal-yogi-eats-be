@@ -15,13 +15,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-
     @Getter
     private final UserEntity userEntity;
 
     public UUID getUserUuid() {
         return getUserEntity().getUuid();
     }
+
     @Override
     public String getUsername() {
         return userEntity.getUsername();
@@ -63,4 +63,5 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

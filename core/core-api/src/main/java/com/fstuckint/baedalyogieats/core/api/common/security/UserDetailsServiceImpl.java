@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.common.security;
 
-
 import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.UserException;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserEntity;
@@ -22,7 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("loadUserByUsername: {}", username);
-        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
+        UserEntity userEntity = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
         return new UserDetailsImpl(userEntity);
     }
+
 }

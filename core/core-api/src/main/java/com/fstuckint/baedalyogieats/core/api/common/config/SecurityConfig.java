@@ -27,7 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtils jwtUtils;
+
     private final AuthenticationConfiguration configuration;
+
     private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
@@ -58,19 +60,22 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.authorizeHttpRequests(req ->
-                req
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/api/v1/users", "/api/v1/users/authorization").permitAll()
-                        .requestMatchers("/api/v1/users/token").hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-        );
-
+        http.authorizeHttpRequests(req -> req.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+            .permitAll()
+            .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
+            .permitAll()
+            .requestMatchers("/api/v1/users/token")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER"));
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 }

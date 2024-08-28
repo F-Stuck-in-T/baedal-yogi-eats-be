@@ -47,7 +47,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserPageResponse getUserList(LocalDateTime cursor, Integer limit, String sortKey, String direction) {
-        Page<UserEntity> userPage = userPilot.findAllUser(cursor, PageRequest.of(0, limit, Sort.by(Sort.Direction.fromString(direction), sortKey)));
+        Page<UserEntity> userPage = userPilot.findAllUser(cursor,
+                PageRequest.of(0, limit, Sort.by(Sort.Direction.fromString(direction), sortKey)));
         return UserResult.toUserPageResponse(userPage);
     }
 
@@ -59,28 +60,31 @@ public class UserService {
 
     @Transactional
     public UserResult updateUser(UUID id, UpdateUserDto updateUserDto, String bearerToken) {
-        if (jwtUtils.checkAdmin(bearerToken)) return UserResult.of(userPilot.updateUser(id, updateUserDto));
-        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken)) return UserResult.of(userPilot.updateUser(id, updateUserDto));
-        else throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (jwtUtils.checkAdmin(bearerToken))
+            return UserResult.of(userPilot.updateUser(id, updateUserDto));
+        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken))
+            return UserResult.of(userPilot.updateUser(id, updateUserDto));
+        else
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
     }
 
     @Transactional
     public void deleteUser(UUID id, String bearerToken) {
-        if (jwtUtils.checkAdmin(bearerToken)) userPilot.findAndDelete(id);
-        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken)) userPilot.findAndDelete(id);
-        else throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (jwtUtils.checkAdmin(bearerToken))
+            userPilot.findAndDelete(id);
+        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken))
+            userPilot.findAndDelete(id);
+        else
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
     }
-
 
     /**
      * 당신은 필터로 대체되었습니다.
      *
-     @Transactional(readOnly = true)
-     public String createToken(LoginDto loginDto) {
-     log.info("너 어차피 동작 안하잖아!");
-     UserResult user = userPilot.findByUsernameAndIsDeletedFalse(loginDto.username());
-     return jwtUtils.createToken(user.uuid(), user.username(), user.userRole());
-     }
+     * @Transactional(readOnly = true) public String createToken(LoginDto loginDto) {
+     * log.info("너 어차피 동작 안하잖아!"); UserResult user =
+     * userPilot.findByUsernameAndIsDeletedFalse(loginDto.username()); return
+     * jwtUtils.createToken(user.uuid(), user.username(), user.userRole()); }
      **/
 
 }

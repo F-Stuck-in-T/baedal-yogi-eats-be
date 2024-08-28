@@ -37,16 +37,16 @@ public class UserController {
     /**
      * 당신은 필터로 대체되었습니다.
      *
-    @PostMapping("/authorization")
-    public ResponseEntity<ApiResponse<?>> createToken(@RequestBody LoginDto loginDto) {
-        log.info("절대 동작 안해!");
-        String token = userService.createToken(loginDto);
-        return ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER, token).body(ApiResponse.success(token));
-    }
+     * @PostMapping("/authorization") public ResponseEntity<ApiResponse<?>>
+     * createToken(@RequestBody LoginDto loginDto) { log.info("절대 동작 안해!"); String token =
+     * userService.createToken(loginDto); return
+     * ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER,
+     * token).body(ApiResponse.success(token)); }
      **/
 
     @DeleteMapping("/token")
-    public ResponseEntity<ApiResponse<?>> deleteToken(@RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+    public ResponseEntity<ApiResponse<?>> deleteToken(
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         userService.deleteToken(bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }
@@ -68,13 +68,15 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, bearerToken));
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         userService.deleteUser(uuid, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }

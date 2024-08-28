@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.common.security;
 
-
 import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +28,12 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
+
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         log.info("authorization filter run");
         String token = jwtUtils.extractToken(request);
@@ -47,7 +48,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try {
                 setAuthentication(claims.get(JwtUtils.CLAIMS_USERNAME).toString());
                 log.info("authorization filter Authentication Object Create!");
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 log.error(e.getMessage());
                 handleServerException(response);
                 return;
@@ -85,4 +87,5 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         response.getWriter().write(jsonResponse);
         response.getWriter().flush();
     }
+
 }

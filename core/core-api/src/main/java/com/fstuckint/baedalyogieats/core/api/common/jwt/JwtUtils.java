@@ -98,7 +98,8 @@ public class JwtUtils {
     }
 
     private String subStringToken(String token) {
-        if (token != null) return token.substring(7);
+        if (token != null)
+            return token.substring(7);
         throw new UserException(ErrorType.TOKEN_ERROR);
     }
 
@@ -129,10 +130,10 @@ public class JwtUtils {
         return role.equals(UserRole.CUSTOMER.getAuthority());
     }
 
-
     public boolean checkIdentityToken(UUID userUuid, String bearerToken) {
         String token = subStringToken(bearerToken);
         UUID uuid = UUID.fromString(extractClaims(token).get(CLAIMS_UUID).toString());
         return userUuid.equals(uuid);
     }
+
 }
