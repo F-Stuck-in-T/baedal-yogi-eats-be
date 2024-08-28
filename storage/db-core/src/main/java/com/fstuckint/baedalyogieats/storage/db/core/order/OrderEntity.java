@@ -27,7 +27,7 @@ public class OrderEntity extends BaseEntity {
     @Builder
     public OrderEntity(Type type, UUID buyerUuid) {
         this.type = type;
-        this.status = Status.RECEIVED;
+        this.status = Status.PENDING;
         this.buyerUuid = buyerUuid;
     }
 
@@ -37,6 +37,18 @@ public class OrderEntity extends BaseEntity {
 
     public void addBuyer(UUID buyerUuid) {
         this.buyerUuid = buyerUuid;
+    }
+
+    public void received() {
+        this.status = Status.RECEIVED;
+    }
+
+    public void shipping() {
+        this.status = Status.SHIPPING;
+    }
+
+    public void delivered() {
+        this.status = Status.DELIVERED;
     }
 
 }
