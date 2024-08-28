@@ -2,12 +2,12 @@ package com.fstuckint.baedalyogieats.core.enums.order;
 
 public enum Status {
 
-    RECEIVED("접수 완료"), SHIPPING("배송중"), DELIVERED("배송 완료");
+    PENDING("접수대기"), RECEIVED("접수완료"), SHIPPING("배송중"), DELIVERED("배송완료");
 
-    Status(String message) {
-        this.message = message;
+    Status(String description) {
+        this.description = description;
     }
 
-    private final String message;
+    private final String description;
 
 }

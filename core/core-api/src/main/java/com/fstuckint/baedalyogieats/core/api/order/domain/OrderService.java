@@ -17,31 +17,20 @@ public class OrderService {
     @Transactional
     public OrderInfo register(RegisterOrderCommand command) {
 
-        OrderEntity orderEntity = OrderEntity.builder()
-            .type(command.getType())
-            .buyerUuid(command.getBuyer().getUserUuid())
-            .build();
+        OrderEntity orderEntity = command.toEntity();
 
-        List<OrderItemEntity> orderItemEntities = command.getProducts()
+        List<OrderItemEntity> orderItemEntities = command.getOrderItems()
             .stream()
-            .map(product -> OrderItemEntity.builder()
-                .name(product.getName())
-                .unitPrice(product.getUnitPrice())
-                .orderEntity(orderEntity)
-                .productUuid(product.getProductUuid())
-                .build())
+            .map(orderItem -> orderItem.toEntity(orderEntity))
             .toList();
 
-        orderEntity.setTotalPrice(orderItemEntities.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
+        BuyerEntity buyerEntity = command.getBuyer().toEntity();
 
-        BuyerEntity buyerEntity = BuyerEntity.builder()
-            .nickname(command.getBuyer().getNickname())
-            .userUuid(command.getBuyer().getUserUuid())
-            .build();
+        OrderEntity storedOrder = orderStore.storeOrderAgg(orderEntity, orderItemEntities, buyerEntity);
+        storedOrder.addBuyer(buyerEntity.getUuid());
+        storedOrder.addTotalPrice(orderItemEntities.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
 
-        OrderEntity savedOrder = orderStore.storeOrder(orderEntity, orderItemEntities, buyerEntity);
-
-        return new OrderInfo(savedOrder);
+        return new OrderInfo(storedOrder);
     }
 
 }

@@ -15,21 +15,17 @@ public class RegisterOrderRequest {
 
     private RegisterBuyerRequest buyer;
 
-    private List<RegisterOrderItemRequest> products = new ArrayList<>();
+    private List<RegisterOrderItemRequest> orderItems = new ArrayList<>();
 
     public RegisterOrderCommand toCommand() {
 
         RegisterBuyerCommand buyer = this.buyer.toCommand();
 
-        List<RegisterOrderItemCommand> orderItems = this.products.stream()
-            .map(registerOrderItemRequest -> RegisterOrderItemCommand.builder()
-                .name(registerOrderItemRequest.name)
-                .unitPrice(registerOrderItemRequest.unitPrice)
-                .productUuid(registerOrderItemRequest.productUuid)
-                .build())
+        List<RegisterOrderItemCommand> orderItems = this.orderItems.stream()
+            .map(RegisterOrderItemRequest::toCommand)
             .toList();
 
-        return RegisterOrderCommand.builder().type(this.type).buyer(buyer).products(orderItems).build();
+        return RegisterOrderCommand.builder().type(this.type).buyer(buyer).orderItems(orderItems).build();
     }
 
     @Getter
