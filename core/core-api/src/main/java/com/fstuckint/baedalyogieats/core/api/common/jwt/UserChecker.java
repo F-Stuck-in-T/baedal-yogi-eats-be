@@ -15,8 +15,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserChecker {
 
-    private final PasswordEncoder passwordEncoder;
-
     private final JwtUtils jwtUtils;
 
     public void checkTokenValid(String token) {
