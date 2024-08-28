@@ -1,18 +1,15 @@
 package com.fstuckint.baedalyogieats.core.api.user.controller.v1;
 
 import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
-import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.LoginDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.SignupDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.UpdateUserDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.response.UserPageResponse;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.response.UserResponse;
 import com.fstuckint.baedalyogieats.core.api.user.domain.UserService;
 import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

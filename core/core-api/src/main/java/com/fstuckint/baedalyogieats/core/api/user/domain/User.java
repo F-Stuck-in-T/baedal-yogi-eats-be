@@ -5,10 +5,8 @@ import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
 @Getter
 @AllArgsConstructor
