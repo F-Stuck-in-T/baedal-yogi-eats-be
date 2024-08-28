@@ -97,7 +97,7 @@ public class JwtUtils {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    private String subStringToken(String token) {
+    public String subStringToken(String token) {
         if (token != null)
             return token.substring(7);
         throw new UserException(ErrorType.TOKEN_ERROR);

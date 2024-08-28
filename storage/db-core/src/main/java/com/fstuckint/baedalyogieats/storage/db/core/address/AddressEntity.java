@@ -17,10 +17,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AddressEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
-
     private String full_address;
 
     private UUID userUuid;
@@ -37,7 +33,7 @@ public class AddressEntity extends BaseEntity {
         return this;
     }
 
-    public AddressEntity deleteAddress() {
+    public AddressEntity delete() {
         isDeleted = true;
         return this;
     }
