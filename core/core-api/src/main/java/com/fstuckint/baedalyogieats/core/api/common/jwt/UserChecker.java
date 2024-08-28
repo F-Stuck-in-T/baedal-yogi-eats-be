@@ -19,6 +19,10 @@ public class UserChecker {
 
     private final JwtUtils jwtUtils;
 
+    public boolean checkPassword(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
+    }
+
     public void checkTokenValid(String token) {
         if (token == null || !jwtUtils.validationToken(token))
             throw new UserException(ErrorType.TOKEN_ERROR);
@@ -41,4 +45,13 @@ public class UserChecker {
             throw new UserException(ErrorType.ROLE_ERROR);
     }
 
+    public boolean checkTokenOwner(String token) {
+        String role = jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_ROLE).toString();
+        return UserRole.OWNER.getAuthority().equals(role);
+    }
+
+    public void checkIdentityByUsername(String token, String username) {
+        UUID uuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
+    }
+  
 }
