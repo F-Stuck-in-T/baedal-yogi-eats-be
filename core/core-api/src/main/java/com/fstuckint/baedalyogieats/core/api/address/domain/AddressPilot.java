@@ -58,27 +58,34 @@ public class AddressPilot {
     public AddressResult updateAddress(UUID addressUuid, AddressRequest addressRequest, String bearerToken) {
         String token = jwtUtils.subStringToken(bearerToken);
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        userRepository.findByUuidAndIsDeletedFalse(addressRequest.userUuid()).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressUuid).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!addressEntity.getUserUuid().equals(userUuid)) throw new AddressException(ErrorType.BAD_REQUEST_ERROR);
+        userRepository.findByUuidAndIsDeletedFalse(addressRequest.userUuid())
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressUuid)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        if (!addressEntity.getUserUuid().equals(userUuid))
+            throw new AddressException(ErrorType.BAD_REQUEST_ERROR);
         return AddressResult.of(addressRepository.save(addressEntity.updateAddress(addressRequest.address())));
     }
 
     public AddressResult updateAddressAdmin(UUID addressId, AddressRequest addressRequest) {
-        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         return AddressResult.of(addressRepository.save(addressEntity.updateAddress(addressRequest.address())));
     }
 
     public AddressResult deleteAddress(UUID addressId, String bearerToken) {
         String token = jwtUtils.subStringToken(bearerToken);
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
-        if (!addressEntity.getUserUuid().equals(userUuid)) throw new AddressException(ErrorType.BAD_REQUEST_ERROR);
+        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        if (!addressEntity.getUserUuid().equals(userUuid))
+            throw new AddressException(ErrorType.BAD_REQUEST_ERROR);
         return AddressResult.of(addressEntity.delete());
     }
 
     public AddressResult deleteAddressAdmin(UUID addressUuid) {
-        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressUuid).orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+        AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressUuid)
+            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         return AddressResult.of(addressEntity.delete());
     }
 

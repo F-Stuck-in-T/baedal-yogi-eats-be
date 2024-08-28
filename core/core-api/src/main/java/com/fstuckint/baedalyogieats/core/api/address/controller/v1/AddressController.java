@@ -22,7 +22,7 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> registerAddress(@RequestBody AddressRequest addressDto,
-                                                          @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         AddressResponse data = addressService.registerAddress(addressDto, bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
@@ -42,13 +42,15 @@ public class AddressController {
 
     @PutMapping("/{addressId}")
     public ResponseEntity<ApiResponse<?>> updateAddress(@PathVariable UUID addressId,
-            @RequestBody AddressRequest addressRequest, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestBody AddressRequest addressRequest,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         AddressResponse data = addressService.updateAddress(addressId, addressRequest, bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<ApiResponse<?>> deleteAddress(@PathVariable UUID addressId, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+    public ResponseEntity<ApiResponse<?>> deleteAddress(@PathVariable UUID addressId,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         AddressResponse data = addressService.deleteAddress(addressId, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }
