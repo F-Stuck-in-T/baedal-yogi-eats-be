@@ -31,8 +31,12 @@ public class OrderEntity extends BaseEntity {
         this.buyerUuid = buyerUuid;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
+    public void addTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public void addBuyer(UUID buyerUuid) {
+        this.buyerUuid = buyerUuid;
     }
 
 }

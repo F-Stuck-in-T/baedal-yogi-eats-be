@@ -16,11 +16,13 @@ public class OrderStore {
 
     private final BuyerRepository buyerRepository;
 
-    public OrderEntity storeOrder(OrderEntity orderEntity, List<OrderItemEntity> orderItemEntities,
+    public OrderEntity storeOrderAgg(OrderEntity orderEntity, List<OrderItemEntity> orderItemEntities,
             BuyerEntity buyerEntity) {
+
         OrderEntity savedOrder = orderRepository.save(orderEntity);
         orderItemRepository.saveAll(orderItemEntities);
         buyerRepository.save(buyerEntity);
+
         return savedOrder;
     }
 

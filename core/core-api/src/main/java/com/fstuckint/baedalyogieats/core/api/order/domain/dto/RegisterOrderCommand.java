@@ -1,6 +1,7 @@
 package com.fstuckint.baedalyogieats.core.api.order.domain.dto;
 
 import com.fstuckint.baedalyogieats.core.enums.order.*;
+import com.fstuckint.baedalyogieats.storage.db.core.order.*;
 import lombok.*;
 
 import java.util.*;
@@ -14,7 +15,11 @@ public class RegisterOrderCommand {
 
     private RegisterBuyerCommand buyer;
 
-    private List<RegisterOrderItemCommand> products = new ArrayList<>();
+    private List<RegisterOrderItemCommand> orderItems = new ArrayList<>();
+
+    public OrderEntity toEntity() {
+        return OrderEntity.builder().type(this.type).build();
+    }
 
     @Getter
     @Builder
@@ -24,6 +29,10 @@ public class RegisterOrderCommand {
         private String nickname;
 
         private UUID userUuid;
+
+        public BuyerEntity toEntity() {
+            return BuyerEntity.builder().nickname(this.nickname).userUuid(this.userUuid).build();
+        }
 
     }
 
@@ -37,6 +46,15 @@ public class RegisterOrderCommand {
         private Integer unitPrice;
 
         private UUID productUuid;
+
+        public OrderItemEntity toEntity(OrderEntity orderEntity) {
+            return OrderItemEntity.builder()
+                .name(this.name)
+                .unitPrice(this.unitPrice)
+                .orderEntity(orderEntity)
+                .productUuid(this.productUuid)
+                .build();
+        }
 
     }
 
