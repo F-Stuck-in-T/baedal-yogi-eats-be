@@ -44,14 +44,14 @@ public class UserPilot {
 
     public UserEntity findByUuid(UUID id) {
         return userRepository.findByUuidAndIsDeletedFalse(id)
-            .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
     }
 
     public UserEntity updateUser(UUID id, UpdateUserDto updateUserDto) {
         UserEntity user = findByUuid(id);
 
-        user.updateNickname(updateUserDto.getNickname());
-        user.updatePassword(passwordEncoder.encode(updateUserDto.getPassword()));
+        user.updateNickname(updateUserDto.nickname());
+        user.updatePassword(passwordEncoder.encode(updateUserDto.password()));
         return userRepository.save(user);
     }
 

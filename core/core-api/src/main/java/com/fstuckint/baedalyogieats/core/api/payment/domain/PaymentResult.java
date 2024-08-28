@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record PaymentResult(UUID paymentUuid, UUID orderUuid, UUID userUuid, UUID storeUuid, PaymentType paymentType,
-        Integer amount) {
+                            Integer amount) {
 
     public static PaymentResult of(PaymentEntity paymentEntity) {
         return new PaymentResult(paymentEntity.getUuid(), paymentEntity.getOrderUuid(), paymentEntity.getUserUuid(),

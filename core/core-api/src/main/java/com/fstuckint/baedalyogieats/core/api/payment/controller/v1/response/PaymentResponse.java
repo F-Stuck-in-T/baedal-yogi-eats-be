@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 public record PaymentResponse(PaymentType type, UUID paymentUuid, UUID userUuid, UUID orderUuid, UUID storeUuid,
-        Integer amount) {
+                              Integer amount) {
 
     public static PaymentResponse of(PaymentResult paymentResult) {
         return new PaymentResponse(paymentResult.paymentType(), paymentResult.paymentUuid(), paymentResult.userUuid(),

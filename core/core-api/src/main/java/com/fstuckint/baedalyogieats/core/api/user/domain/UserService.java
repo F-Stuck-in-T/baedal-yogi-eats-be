@@ -28,8 +28,6 @@ public class UserService {
 
     private final UserPilot userPilot;
 
-    private final UserChecker userChecker;
-
     private final JwtUtils jwtUtils;
 
     @Transactional
@@ -42,61 +40,51 @@ public class UserService {
         userPilot.add(user);
     }
 
-    @Transactional(readOnly = true)
-    public String createToken(LoginDto loginDto) {
-        UserResult user = userPilot.findByUsernameAndIsDeletedFalse(loginDto.username());
-        if (user == null)
-            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
-        if (!userChecker.checkPassword(loginDto.password(), user.password()))
-            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
-        return jwtUtils.createToken(user.uuid(), user.username(), user.userRole());
-
-    }
-
     @Transactional
-    public void deleteToken(HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
-        jwtUtils.addBlacklist(token);
+    public void deleteToken(String bearerToken) {
+        jwtUtils.addBlacklist(bearerToken);
     }
 
     @Transactional(readOnly = true)
-    public UserPageResponse getUserList(LocalDateTime cursor, Integer limit, String sortKey, String direction,
-            HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
+    public UserPageResponse getUserList(LocalDateTime cursor, Integer limit, String sortKey, String direction) {
         Page<UserEntity> userPage = userPilot.findAllUser(cursor,
                 PageRequest.of(0, limit, Sort.by(Sort.Direction.fromString(direction), sortKey)));
         return UserResult.toUserPageResponse(userPage);
     }
 
     @Transactional(readOnly = true)
-    public UserResult getUser(UUID id, HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
-
+    public UserResult getUser(UUID id) {
         UserEntity user = userPilot.findByUuid(id);
         return UserResult.of(user);
     }
 
     @Transactional
-    public UserResult updateUser(UUID id, UpdateUserDto updateUserDto, HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
-        if (!userChecker.checkAdmin(token)) {
-            userChecker.checkIdentityByUserUuid(token, id);
-        }
-        return UserResult.of(userPilot.updateUser(id, updateUserDto));
+    public UserResult updateUser(UUID id, UpdateUserDto updateUserDto, String bearerToken) {
+        if (jwtUtils.checkAdmin(bearerToken))
+            return UserResult.of(userPilot.updateUser(id, updateUserDto));
+        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken))
+            return UserResult.of(userPilot.updateUser(id, updateUserDto));
+        else
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
     }
 
     @Transactional
-    public void deleteUser(UUID id, HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
-        if (!userChecker.checkAdmin(token)) {
-            userChecker.checkIdentityByUserUuid(token, id);
-        }
-        userPilot.findAndDelete(id);
+    public void deleteUser(UUID id, String bearerToken) {
+        if (jwtUtils.checkAdmin(bearerToken))
+            userPilot.findAndDelete(id);
+        else if (jwtUtils.checkCustomer(bearerToken) && jwtUtils.checkIdentityToken(id, bearerToken))
+            userPilot.findAndDelete(id);
+        else
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
     }
+
+    /**
+     * 당신은 필터로 대체되었습니다.
+     *
+     * @Transactional(readOnly = true) public String createToken(LoginDto loginDto) {
+     * log.info("너 어차피 동작 안하잖아!"); UserResult user =
+     * userPilot.findByUsernameAndIsDeletedFalse(loginDto.username()); return
+     * jwtUtils.createToken(user.uuid(), user.username(), user.userRole()); }
+     **/
 
 }

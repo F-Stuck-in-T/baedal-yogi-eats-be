@@ -27,7 +27,7 @@ public class AddressPilot {
     public AddressResult registerAddress(String token, AddressRequest addressRequest) {
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
         UserEntity useEntity = userRepository.findByUuidAndIsDeletedFalse(userUuid)
-            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         Address address = addressRequest.toAddress();
         if (useEntity.getUuid() != addressRequest.userUuid())
             throw new AddressException(ErrorType.BAD_REQUEST_ERROR);
@@ -48,13 +48,13 @@ public class AddressPilot {
 
     public AddressResult updateAddress(UUID addressUuid, AddressRequest addressRequest) {
         AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressUuid)
-            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         return AddressResult.of(addressRepository.save(addressEntity.updateAddress(addressRequest.address())));
     }
 
     public void checkIdentity(String token, UUID addressId) {
         AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId)
-            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
         if (addressEntity.getUserUuid() != userUuid)
             throw new AddressException(ErrorType.TOKEN_ERROR);
@@ -62,7 +62,7 @@ public class AddressPilot {
 
     public void deleteAddress(UUID addressId) {
         AddressEntity addressEntity = addressRepository.findByUuidAndIsDeletedFalse(addressId)
-            .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new AddressException(ErrorType.NOT_FOUND_ERROR));
         addressEntity.deleteAddress();
     }
 
