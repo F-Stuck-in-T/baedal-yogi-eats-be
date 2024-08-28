@@ -1,6 +1,8 @@
 package com.fstuckint.baedalyogieats.core.api.order.domain;
 
 import com.fstuckint.baedalyogieats.core.api.order.domain.dto.*;
+import com.fstuckint.baedalyogieats.core.api.order.support.error.*;
+import com.fstuckint.baedalyogieats.core.enums.order.*;
 import com.fstuckint.baedalyogieats.storage.db.core.order.*;
 import lombok.*;
 import org.springframework.stereotype.*;
@@ -14,8 +16,10 @@ public class OrderService {
 
     private final OrderStore orderStore;
 
+    private final OrderReader orderReader;
+
     @Transactional
-    public OrderInfo register(RegisterOrderCommand command) {
+    public OrderInfo registerOrder(RegisterOrderCommand command) {
 
         OrderEntity orderEntity = command.toEntity();
 
@@ -31,6 +35,39 @@ public class OrderService {
         storedOrder.addTotalPrice(orderItemEntities.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
 
         return new OrderInfo(storedOrder);
+    }
+
+    @Transactional
+    public void changeOrderReceived(UUID uuid) {
+        OrderEntity orderEntity = orderReader.getByUuid(uuid);
+        if (orderEntity.getStatus() == Status.PENDING) {
+            orderEntity.received();
+        }
+        else {
+            throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
+        }
+    }
+
+    @Transactional
+    public void changeOrderShipping(UUID uuid) {
+        OrderEntity orderEntity = orderReader.getByUuid(uuid);
+        if (orderEntity.getStatus() == Status.RECEIVED) {
+            orderEntity.shipping();
+        }
+        else {
+            throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
+        }
+    }
+
+    @Transactional
+    public void changeOrderDelivered(UUID uuid) {
+        OrderEntity orderEntity = orderReader.getByUuid(uuid);
+        if (orderEntity.getStatus() == Status.SHIPPING) {
+            orderEntity.delivered();
+        }
+        else {
+            throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
+        }
     }
 
 }

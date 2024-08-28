@@ -8,6 +8,8 @@ import com.fstuckint.baedalyogieats.core.api.order.support.response.*;
 import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
+
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -17,8 +19,26 @@ public class OrderController {
 
     @PostMapping
     public ApiResponse<RegisterOrderResponse> registerOrder(@RequestBody RegisterOrderRequest request) {
-        OrderInfo info = orderService.register(request.toCommand());
+        OrderInfo info = orderService.registerOrder(request.toCommand());
         return ApiResponse.success(RegisterOrderResponse.of(info));
+    }
+
+    @PutMapping("/{orderUuid}/received")
+    public ApiResponse changeReceived(@PathVariable("orderUuid") UUID uuid) {
+        orderService.changeOrderReceived(uuid);
+        return ApiResponse.success(null);
+    }
+
+    @PutMapping("/{orderUuid}/shipping")
+    public ApiResponse changeShipping(@PathVariable("orderUuid") UUID uuid) {
+        orderService.changeOrderShipping(uuid);
+        return ApiResponse.success(null);
+    }
+
+    @PutMapping("/{orderUuid}/delivered")
+    public ApiResponse changeDelivered(@PathVariable("orderUuid") UUID uuid) {
+        orderService.changeOrderDelivered(uuid);
+        return ApiResponse.success(null);
     }
 
 }
