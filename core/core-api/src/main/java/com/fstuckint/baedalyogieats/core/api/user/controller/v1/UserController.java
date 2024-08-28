@@ -69,14 +69,14 @@ public class UserController {
 
     @PutMapping("/{uuid}")
     public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
-                                                     @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, bearerToken));
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @DeleteMapping("/{uuid}")
     public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid,
-                                                     @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         userService.deleteUser(uuid, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }

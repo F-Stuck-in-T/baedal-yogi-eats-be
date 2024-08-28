@@ -42,19 +42,19 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public PaymentPageResponse getPaymentListByUser(UUID userUuid, LocalDateTime cursor, Integer limit, String sortKey,
-                                                    String direction, HttpServletRequest request) {
+            String direction, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
         if (!userChecker.checkAdmin(token)) {
             userChecker.checkIdentityByUserUuid(token, userUuid);
         }
         return PaymentResult
-                .of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
+            .of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
     }
 
     @Transactional(readOnly = true)
     public PaymentPageResponse getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, Integer limit,
-                                                     String sortKey, String direction, HttpServletRequest request) {
+            String sortKey, String direction, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
 
@@ -64,7 +64,7 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public PaymentPageResponse getAllPayment(LocalDateTime cursor, Integer limit, String sortKey, String direction,
-                                             HttpServletRequest request) {
+            HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         if (!userChecker.checkAdmin(token)) {
             throw new PaymentException(ErrorType.ROLE_ERROR);

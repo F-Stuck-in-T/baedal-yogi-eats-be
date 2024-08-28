@@ -5,7 +5,6 @@ import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-
 public record SignupDto(
         @Size(min = 4, max = 10, message = "Username must be between 4 and 10 characters.") @Pattern(
                 regexp = "^[a-z0-9]+$") String username,

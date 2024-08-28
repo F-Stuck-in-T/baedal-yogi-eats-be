@@ -40,7 +40,7 @@ public class PaymentPilot {
     }
 
     public Page<PaymentEntity> getPaymentListByStoreUuid(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage,
-                                                         String token) {
+            String token) {
 
         // TODO:
         // 1. store Repo 에서 storeUuid 와 일치하는 store 객체 찾기
@@ -74,7 +74,7 @@ public class PaymentPilot {
 
     public void cancelPayment(UUID paymentUuid) {
         PaymentEntity paymentEntity = paymentRepository.findByUuidAndIsCancelFalse(paymentUuid)
-                .orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+            .orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
         paymentEntity.cancel();
     }
 

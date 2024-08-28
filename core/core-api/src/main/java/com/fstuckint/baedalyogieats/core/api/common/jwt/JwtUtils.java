@@ -59,14 +59,14 @@ public class JwtUtils {
 
     public String createToken(UUID uuid, String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
-                .claim(CLAIMS_UUID, uuid)
-                .claim(CLAIMS_USERNAME, username)
-                .claim(CLAIMS_ROLE, role.getAuthority())
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setIssuer(issuer)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .compact();
+            .claim(CLAIMS_UUID, uuid)
+            .claim(CLAIMS_USERNAME, username)
+            .claim(CLAIMS_ROLE, role.getAuthority())
+            .signWith(key, SignatureAlgorithm.HS256)
+            .setIssuer(issuer)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .compact();
     }
 
     public void setTokenInHeader(String token, HttpServletResponse response) {

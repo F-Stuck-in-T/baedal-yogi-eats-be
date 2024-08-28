@@ -61,21 +61,20 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(req -> req.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .permitAll()
-                .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
-                .permitAll()
-                .requestMatchers("/api/v1/users/token")
-                .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.GET, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .permitAll()
+            .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
+            .permitAll()
+            .requestMatchers("/api/v1/users/token")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
 
-                .anyRequest().permitAll()
-        );
-
+            .anyRequest()
+            .permitAll());
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

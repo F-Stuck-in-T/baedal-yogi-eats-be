@@ -23,16 +23,16 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> requestPayment(@RequestBody PaymentRequest paymentRequestDto,
-                                                         HttpServletRequest request) {
+            HttpServletRequest request) {
         PaymentResponse data = paymentService.requestPayment(paymentRequestDto, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @GetMapping("/users/{userUuid}")
     public ResponseEntity<ApiResponse<?>> getPaymentListByUser(@PathVariable UUID userUuid,
-                                                               @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-                                                               @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-                                                               @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
+            @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
+            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
         PaymentPageResponse data = paymentService.getPaymentListByUser(userUuid, cursor, limit, sortKey, direction,
                 request);
         return ResponseEntity.ok(ApiResponse.success(data));
@@ -40,9 +40,9 @@ public class PaymentController {
 
     @GetMapping("/stores/{storeUuid}")
     public ResponseEntity<ApiResponse<?>> getPaymentListByOwner(@PathVariable UUID storeUuid,
-                                                                @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-                                                                @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-                                                                @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
+            @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
+            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
         PaymentPageResponse data = paymentService.getPaymentListByOwner(storeUuid, cursor, limit, sortKey, direction,
                 request);
         return ResponseEntity.ok(ApiResponse.success(data));

@@ -12,7 +12,6 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
-
     @Query("select u from UserEntity u where u.isDeleted = false and u.createdAt > :dateCursor")
     Page<UserEntity> findAllUserByIsDeletedFalse(LocalDateTime dateCursor, Pageable pageable);
 

@@ -44,7 +44,7 @@ public class UserPilot {
 
     public UserEntity findByUuid(UUID id) {
         return userRepository.findByUuidAndIsDeletedFalse(id)
-                .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
+            .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
     }
 
     public UserEntity updateUser(UUID id, UpdateUserDto updateUserDto) {
