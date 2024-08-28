@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class AiChatsController {
 
     private final AiChatsService aiChatsService;
+
     @PostMapping("/product/description")
-    public ResponseEntity<ApiResponse<?>> createProductDescription(@RequestBody ProductDescriptionRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> createProductDescription(@RequestBody ProductDescriptionRequestDto requestDto,
+            HttpServletRequest request) {
         return aiChatsService.createProductDescription(requestDto, request);
     }
-
-
 
 }

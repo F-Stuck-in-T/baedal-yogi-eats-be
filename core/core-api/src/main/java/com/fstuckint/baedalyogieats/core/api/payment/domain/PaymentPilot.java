@@ -22,8 +22,8 @@ public class PaymentPilot {
 
     private final PaymentRepository paymentRepository;
 
-    //    private final OrderRepository orderRepository;
-//    private final StoreRepository storeRepository;
+    // private final OrderRepository orderRepository;
+    // private final StoreRepository storeRepository;
     private final JwtUtils jwtUtils;
 
     public PaymentResult requestPayment(PaymentRequest dto) {
@@ -34,38 +34,48 @@ public class PaymentPilot {
         return PaymentResult.of(paymentRepository.save(paymentEntity));
     }
 
-
     public Page<PaymentEntity> getPaymentListByUserUuid(UUID userUuid, LocalDateTime cursor, PageRequest sortedPage) {
-        return paymentRepository.findAllByUserUuid(userUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        return paymentRepository.findAllByUserUuid(userUuid,
+                cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
     }
 
+    public Page<PaymentEntity> getPaymentListByStoreUuid(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage,
+            String token) {
 
-    public Page<PaymentEntity> getPaymentListByStoreUuid(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage, String token) {
-
-    // TODO:
-    //  1. store Repo 에서 storeUuid 와 일치하는 store 객체 찾기
-    //  - ( 없다면 Exception )
-    //  - ( 있다면 2. )
-    //  2.a. 만약 UserRole.MASTER 또는 MANAGER 일 떄, 바로 query 날림.
-    //  2.b. 만약 UserRole.OWNER 일 때, store 객체의 userUuid == token Uuid 동일 유무 확인 후 query 날림
+        // TODO:
+        // 1. store Repo 에서 storeUuid 와 일치하는 store 객체 찾기
+        // - ( 없다면 Exception )
+        // - ( 있다면 2. )
+        // 2.a. 만약 UserRole.MASTER 또는 MANAGER 일 떄, 바로 query 날림.
+        // 2.b. 만약 UserRole.OWNER 일 때, store 객체의 userUuid == token Uuid 동일 유무 확인 후 query
+        // 날림
 
         Claims claims = jwtUtils.extractClaims(token);
         String role = claims.get(JwtUtils.CLAIMS_ROLE).toString();
         UUID userUuid = UUID.fromString(claims.get(JwtUtils.CLAIMS_UUID).toString());
-        if (UserRole.CUSTOMER.getAuthority().equals(role)) throw new PaymentException(ErrorType.ROLE_ERROR);
+        if (UserRole.CUSTOMER.getAuthority().equals(role))
+            throw new PaymentException(ErrorType.ROLE_ERROR);
         else if (UserRole.OWNER.getAuthority().equals(role)) {
             // userUuid 와 store 객체의 userUuid 일치 유무 확인
-            // if (userUuid != storeEntity.getUserUuid()) throw new PaymentException(ErrorType.TOKEN_ERROR);
+            // if (userUuid != storeEntity.getUserUuid()) throw new
+            // PaymentException(ErrorType.TOKEN_ERROR);
             return null;
-        } else { return paymentRepository.findAllByStoreUuid(storeUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage); }
+        }
+        else {
+            return paymentRepository.findAllByStoreUuid(storeUuid,
+                    cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        }
     }
 
     public Page<PaymentEntity> getAllPayment(LocalDateTime cursor, PageRequest sortedPage) {
-        return paymentRepository.findAllByAdmin(cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        return paymentRepository.findAllByAdmin(cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor,
+                sortedPage);
     }
 
     public void cancelPayment(UUID paymentUuid) {
-        PaymentEntity paymentEntity = paymentRepository.findByUuidAndIsCancelFalse(paymentUuid).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+        PaymentEntity paymentEntity = paymentRepository.findByUuidAndIsCancelFalse(paymentUuid)
+            .orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
         paymentEntity.cancel();
     }
+
 }

@@ -16,6 +16,7 @@ import java.util.UUID;
 public class UserChecker {
 
     private final PasswordEncoder passwordEncoder;
+
     private final JwtUtils jwtUtils;
 
     public boolean checkPassword(String password, String encodedPassword) {
@@ -23,12 +24,14 @@ public class UserChecker {
     }
 
     public void checkTokenValid(String token) {
-        if (token == null || !jwtUtils.validationToken(token)) throw new UserException(ErrorType.TOKEN_ERROR);
+        if (token == null || !jwtUtils.validationToken(token))
+            throw new UserException(ErrorType.TOKEN_ERROR);
     }
 
     public void checkIdentityByUserUuid(String token, UUID id) {
         UUID uuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        if (!uuid.equals(id)) throw new UserException(ErrorType.TOKEN_ERROR);
+        if (!uuid.equals(id))
+            throw new UserException(ErrorType.TOKEN_ERROR);
     }
 
     public boolean checkAdmin(String token) {
@@ -38,7 +41,8 @@ public class UserChecker {
 
     public void checkTokenNotOwner(String token) {
         String role = jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_ROLE).toString();
-        if (UserRole.OWNER.getAuthority().equals(role)) throw new UserException(ErrorType.ROLE_ERROR);
+        if (UserRole.OWNER.getAuthority().equals(role))
+            throw new UserException(ErrorType.ROLE_ERROR);
     }
 
     public boolean checkTokenOwner(String token) {
@@ -50,4 +54,5 @@ public class UserChecker {
         UUID uuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
 
     }
+
 }

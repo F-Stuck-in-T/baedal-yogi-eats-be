@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
 
-
     @Query("select p from PaymentEntity p where p.isCancel = false and p.createdAt > :dateCursor")
     Page<PaymentEntity> findAllByAdmin(LocalDateTime dateCursor, Pageable sortedPage);
 
@@ -22,4 +21,5 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
     Page<PaymentEntity> findAllByStoreUuid(UUID storeUuid, LocalDateTime dateCursor, Pageable sortedPage);
 
     Optional<PaymentEntity> findByUuidAndIsCancelFalse(UUID uuid);
+
 }

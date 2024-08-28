@@ -16,7 +16,9 @@ import org.springframework.security.core.parameters.P;
 public class User {
 
     private String username;
+
     private String password;
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)

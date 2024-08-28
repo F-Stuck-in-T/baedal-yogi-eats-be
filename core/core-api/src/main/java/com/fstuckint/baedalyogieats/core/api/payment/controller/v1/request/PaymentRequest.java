@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-public record PaymentRequest(PaymentType paymentType, UUID userUuid,
-                             UUID orderUuid, UUID storeUuid) {
+public record PaymentRequest(PaymentType paymentType, UUID userUuid, UUID orderUuid, UUID storeUuid) {
 
     public Payment toPayment() {
         return new Payment(paymentType, userUuid, orderUuid, storeUuid);

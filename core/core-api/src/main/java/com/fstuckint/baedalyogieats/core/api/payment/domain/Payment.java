@@ -15,10 +15,15 @@ import java.util.UUID;
 public class Payment {
 
     private PaymentType status;
+
     private UUID userUuid;
+
     private UUID orderUuid;
+
     private UUID storeUuid;
+
     private Integer amount;
+
     public PaymentEntity toEntity() {
         return new PaymentEntity(status, orderUuid, userUuid, storeUuid, amount);
     }
@@ -33,4 +38,5 @@ public class Payment {
     public void addAmount(Integer amount) {
         this.amount = amount;
     }
+
 }

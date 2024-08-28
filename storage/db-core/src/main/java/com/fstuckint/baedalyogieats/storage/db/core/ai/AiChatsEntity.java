@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.storage.db.core.ai;
 
-
 import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,9 @@ import java.util.UUID;
 public class AiChatsEntity extends BaseEntity {
 
     private String question;
+
     private String answer;
 
     private UUID productUuid;
+
 }

@@ -20,10 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AddressService {
 
-
     private final UserChecker userChecker;
-    private final AddressPilot addressPilot;
 
+    private final AddressPilot addressPilot;
 
     private final JwtUtils jwtUtils;
 
@@ -41,21 +40,16 @@ public class AddressService {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
         userChecker.checkTokenNotOwner(token);
-        return addressPilot.getAddressListByUser(token, userUuid)
-                .stream()
-                .map(AddressResponse::of)
-                .toList();
+        return addressPilot.getAddressListByUser(token, userUuid).stream().map(AddressResponse::of).toList();
     }
 
     @Transactional(readOnly = true)
     public List<AddressResponse> getAddressListByAdmin(HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
-        if (!userChecker.checkAdmin(token)) throw new AddressException(ErrorType.ROLE_ERROR);
-        return addressPilot.getAddressListByAdmin()
-                .stream()
-                .map(AddressResponse::of)
-                .toList();
+        if (!userChecker.checkAdmin(token))
+            throw new AddressException(ErrorType.ROLE_ERROR);
+        return addressPilot.getAddressListByAdmin().stream().map(AddressResponse::of).toList();
     }
 
     @Transactional

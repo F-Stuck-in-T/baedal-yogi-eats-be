@@ -8,24 +8,17 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.UUID;
 
-public record UserResult(
-        UUID uuid, String username, String password,
-        String nickname, UserRole userRole) {
+public record UserResult(UUID uuid, String username, String password, String nickname, UserRole userRole) {
 
     public static UserResult of(UserEntity userEntity) {
-        if (userEntity == null) return null;
-        return new UserResult(
-                userEntity.getUuid(),
-                userEntity.getUsername(),
-                userEntity.getPassword(),
-                userEntity.getNickname(),
-                userEntity.getRole());
+        if (userEntity == null)
+            return null;
+        return new UserResult(userEntity.getUuid(), userEntity.getUsername(), userEntity.getPassword(),
+                userEntity.getNickname(), userEntity.getRole());
     }
 
     public static UserPageResponse toUserPageResponse(Page<UserEntity> userPage) {
-        List<UserResult> list = userPage.stream()
-                .map(UserResult::of)
-                .toList();
+        List<UserResult> list = userPage.stream().map(UserResult::of).toList();
         boolean hasNext = userPage.hasNext();
         return new UserPageResponse(list, hasNext);
     }

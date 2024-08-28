@@ -46,11 +46,10 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<?>> getUsers(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
-                                                   @RequestParam(defaultValue = "10") Integer limit,
-                                                   @RequestParam(defaultValue = "createdAt") String sortKey,
-                                                   @RequestParam(defaultValue = "ASC") String direction,
-                                                   HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> getUsers(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
+            @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "createdAt") String sortKey,
+            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
         UserPageResponse data = userService.getUserList(cursor, limit, sortKey, direction, request);
         return ResponseEntity.ok(ApiResponse.success(data));
 
@@ -64,7 +63,8 @@ public class UserController {
 
     @PutMapping("/{uuid}")
 
-    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
+            HttpServletRequest request) {
         UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, request));
         return ResponseEntity.ok(ApiResponse.success(data));
 

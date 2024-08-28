@@ -13,9 +13,11 @@ import java.util.UUID;
 public class Address {
 
     private String full_address;
+
     private UUID userUuid;
 
     public AddressEntity toEntity() {
         return new AddressEntity(full_address, userUuid);
     }
+
 }

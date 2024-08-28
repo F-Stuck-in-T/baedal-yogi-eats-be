@@ -21,6 +21,7 @@ import java.util.UUID;
 public class UserPilot {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public UserResult add(User user) {
@@ -36,14 +37,14 @@ public class UserPilot {
         return UserResult.of(userRepository.findByNicknameAndIsDeletedFalse(nickname).orElse(null));
     }
 
-
     public Page<UserEntity> findAllUser(LocalDateTime cursor, PageRequest of) {
-        return userRepository.findAllUserByIsDeletedFalse(
-                cursor != null ? cursor : LocalDateTime.of(2000, 1, 1, 0, 0), of);
+        return userRepository.findAllUserByIsDeletedFalse(cursor != null ? cursor : LocalDateTime.of(2000, 1, 1, 0, 0),
+                of);
     }
 
     public UserEntity findByUuid(UUID id) {
-        return userRepository.findByUuidAndIsDeletedFalse(id).orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
+        return userRepository.findByUuidAndIsDeletedFalse(id)
+            .orElseThrow(() -> new UserException(ErrorType.NOT_FOUND_ERROR));
     }
 
     public UserEntity updateUser(UUID id, UpdateUserDto updateUserDto) {
@@ -58,4 +59,5 @@ public class UserPilot {
         UserEntity user = findByUuid(id);
         userRepository.save(user.deleteUser());
     }
+
 }

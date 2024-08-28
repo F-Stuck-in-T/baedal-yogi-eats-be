@@ -26,24 +26,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
 
-
     private final UserPilot userPilot;
+
     private final UserChecker userChecker;
+
     private final JwtUtils jwtUtils;
 
     @Transactional
     public void signUp(SignupDto signupDto) {
         User user = signupDto.toUser();
-        if (userPilot.findByUsernameAndIsDeletedFalse(user.getUsername()) != null) throw new UserException(ErrorType.BAD_REQUEST_ERROR);
-        if (userPilot.findByNicknameAndIsDeletedFalse(user.getNickname()) != null) throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (userPilot.findByUsernameAndIsDeletedFalse(user.getUsername()) != null)
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (userPilot.findByNicknameAndIsDeletedFalse(user.getNickname()) != null)
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
         userPilot.add(user);
     }
 
     @Transactional(readOnly = true)
     public String createToken(LoginDto loginDto) {
         UserResult user = userPilot.findByUsernameAndIsDeletedFalse(loginDto.username());
-        if (user == null) throw new UserException(ErrorType.BAD_REQUEST_ERROR);
-        if (!userChecker.checkPassword(loginDto.password(), user.password())) throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (user == null)
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
+        if (!userChecker.checkPassword(loginDto.password(), user.password()))
+            throw new UserException(ErrorType.BAD_REQUEST_ERROR);
         return jwtUtils.createToken(user.uuid(), user.username(), user.userRole());
 
     }
@@ -56,10 +61,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserPageResponse getUserList(LocalDateTime cursor, Integer limit, String sortKey, String direction, HttpServletRequest request) {
+    public UserPageResponse getUserList(LocalDateTime cursor, Integer limit, String sortKey, String direction,
+            HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
-        Page<UserEntity> userPage = userPilot.findAllUser(cursor, PageRequest.of(0, limit, Sort.by(Sort.Direction.fromString(direction), sortKey)));
+        Page<UserEntity> userPage = userPilot.findAllUser(cursor,
+                PageRequest.of(0, limit, Sort.by(Sort.Direction.fromString(direction), sortKey)));
         return UserResult.toUserPageResponse(userPage);
     }
 
@@ -76,7 +83,9 @@ public class UserService {
     public UserResult updateUser(UUID id, UpdateUserDto updateUserDto, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
-        if (!userChecker.checkAdmin(token)){ userChecker.checkIdentityByUserUuid(token, id);}
+        if (!userChecker.checkAdmin(token)) {
+            userChecker.checkIdentityByUserUuid(token, id);
+        }
         return UserResult.of(userPilot.updateUser(id, updateUserDto));
     }
 
@@ -84,7 +93,9 @@ public class UserService {
     public void deleteUser(UUID id, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
-        if(!userChecker.checkAdmin(token)){ userChecker.checkIdentityByUserUuid(token, id);}
+        if (!userChecker.checkAdmin(token)) {
+            userChecker.checkIdentityByUserUuid(token, id);
+        }
         userPilot.findAndDelete(id);
     }
 

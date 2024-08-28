@@ -27,9 +27,10 @@ import java.util.UUID;
 public class PaymentService {
 
     private final PaymentPilot paymentPilot;
-    private final UserChecker userChecker;
-    private final JwtUtils jwtUtils;
 
+    private final UserChecker userChecker;
+
+    private final JwtUtils jwtUtils;
 
     @Transactional
     public PaymentResponse requestPayment(PaymentRequest dto, HttpServletRequest request) {
@@ -40,33 +41,43 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public PaymentPageResponse getPaymentListByUser(UUID userUuid, LocalDateTime cursor, Integer limit, String sortKey, String direction, HttpServletRequest request) {
+    public PaymentPageResponse getPaymentListByUser(UUID userUuid, LocalDateTime cursor, Integer limit, String sortKey,
+            String direction, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
         userChecker.checkTokenValid(token);
-        if (!userChecker.checkAdmin(token)) { userChecker.checkIdentityByUserUuid(token, userUuid); }
-        return PaymentResult.of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
-    }
-
-
-    @Transactional(readOnly = true)
-    public PaymentPageResponse getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, Integer limit, String sortKey, String direction, HttpServletRequest request) {
-        String token = jwtUtils.extractToken(request);
-        userChecker.checkTokenValid(token);
-
-        return PaymentResult.of(paymentPilot.getPaymentListByStoreUuid(storeUuid, cursor, getSortedPage(limit, sortKey, direction), token));
+        if (!userChecker.checkAdmin(token)) {
+            userChecker.checkIdentityByUserUuid(token, userUuid);
+        }
+        return PaymentResult
+            .of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
     }
 
     @Transactional(readOnly = true)
-    public PaymentPageResponse getAllPayment(LocalDateTime cursor, Integer limit, String sortKey, String direction, HttpServletRequest request) {
+    public PaymentPageResponse getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, Integer limit,
+            String sortKey, String direction, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        if (!userChecker.checkAdmin(token)) { throw new PaymentException(ErrorType.ROLE_ERROR); }
+        userChecker.checkTokenValid(token);
+
+        return PaymentResult.of(paymentPilot.getPaymentListByStoreUuid(storeUuid, cursor,
+                getSortedPage(limit, sortKey, direction), token));
+    }
+
+    @Transactional(readOnly = true)
+    public PaymentPageResponse getAllPayment(LocalDateTime cursor, Integer limit, String sortKey, String direction,
+            HttpServletRequest request) {
+        String token = jwtUtils.extractToken(request);
+        if (!userChecker.checkAdmin(token)) {
+            throw new PaymentException(ErrorType.ROLE_ERROR);
+        }
         return PaymentResult.of(paymentPilot.getAllPayment(cursor, getSortedPage(limit, sortKey, direction)));
     }
 
     @Transactional
     public void cancelPayment(UUID paymentUuid, HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        if (!userChecker.checkAdmin(token)) { throw new PaymentException(ErrorType.ROLE_ERROR); }
+        if (!userChecker.checkAdmin(token)) {
+            throw new PaymentException(ErrorType.ROLE_ERROR);
+        }
         paymentPilot.cancelPayment(paymentUuid);
     }
 
@@ -74,4 +85,5 @@ public class PaymentService {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortKey);
         return PageRequest.of(0, limit, sort);
     }
+
 }

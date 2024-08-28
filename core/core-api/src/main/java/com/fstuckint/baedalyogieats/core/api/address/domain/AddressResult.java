@@ -7,8 +7,6 @@ import java.util.UUID;
 public record AddressResult(UUID uuid, String full_address) {
 
     public static AddressResult of(AddressEntity addressEntity) {
-        return new AddressResult(
-                addressEntity.getUuid(),
-                addressEntity.getFull_address());
+        return new AddressResult(addressEntity.getUuid(), addressEntity.getFull_address());
     }
 }

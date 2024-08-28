@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface AddressRepository extends JpaRepository<AddressEntity, UUID> {
 
     List<AddressEntity> findByUserUuidAndIsDeletedFalse(UUID userUuid);
+
     Optional<AddressEntity> findByUuidAndIsDeletedFalse(UUID uuid);
 
 }

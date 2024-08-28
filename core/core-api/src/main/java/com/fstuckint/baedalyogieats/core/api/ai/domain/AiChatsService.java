@@ -16,12 +16,16 @@ import org.springframework.stereotype.Service;
 public class AiChatsService {
 
     private final AiChatsRepository aiChatsRepository;
+
     private final JwtUtils jwtUtils;
 
-    public ResponseEntity<ApiResponse<?>> createProductDescription(ProductDescriptionRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> createProductDescription(ProductDescriptionRequestDto requestDto,
+            HttpServletRequest request) {
         String token = jwtUtils.extractToken(request);
-        if (!jwtUtils.checkAdmin(token) || !jwtUtils.checkOwner(token)) throw new AiChatsApiException(ErrorType.ROLE_ERROR);
+        if (!jwtUtils.checkAdmin(token) || !jwtUtils.checkOwner(token))
+            throw new AiChatsApiException(ErrorType.ROLE_ERROR);
 
         return null;
     }
+
 }

@@ -1,7 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.user.support;
 
-
-
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserEntity;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
@@ -26,7 +24,7 @@ public class DummyTest {
             list.add(new UserEntity("AAA" + i, "password", "AAA" + i, UserRole.CUSTOMER));
         }
         for (int i = 0; i < 30; i++) {
-               list.add(new UserEntity("BBB" + i, "password", "BBB" + i, UserRole.OWNER));
+            list.add(new UserEntity("BBB" + i, "password", "BBB" + i, UserRole.OWNER));
         }
         for (int i = 0; i < 30; i++) {
             list.add(new UserEntity("CCC" + i, "password", "CCC" + i, UserRole.MANAGER));

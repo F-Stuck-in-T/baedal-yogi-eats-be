@@ -26,10 +26,15 @@ import java.util.UUID;
 public class JwtUtils {
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
+
     public static final String AUTHORIZATION_HEADER = "Authorization";
+
     public static final String BEARER_PREFIX = "Bearer ";
+
     public static final String CLAIMS_USERNAME = "username";
+
     public static final String CLAIMS_UUID = "uuid";
+
     public static final String CLAIMS_ROLE = "auth";
 
     @Value("${spring.application.name}")
@@ -51,14 +56,14 @@ public class JwtUtils {
 
     public String createToken(UUID uuid, String username, UserRole role) {
         return BEARER_PREFIX + Jwts.builder()
-                .claim(CLAIMS_UUID, uuid)
-                .claim(CLAIMS_USERNAME, username)
-                .claim(CLAIMS_ROLE, role.getAuthority())
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setIssuer(issuer)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .compact();
+            .claim(CLAIMS_UUID, uuid)
+            .claim(CLAIMS_USERNAME, username)
+            .claim(CLAIMS_ROLE, role.getAuthority())
+            .signWith(key, SignatureAlgorithm.HS256)
+            .setIssuer(issuer)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .compact();
     }
 
     public boolean validationToken(String token) {
@@ -96,10 +101,10 @@ public class JwtUtils {
         tokenBlacklistRepository.save(blackToken);
     }
 
-
     public boolean checkOwner(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         String role = claims.get(CLAIMS_ROLE).toString();
         return role.equals(UserRole.OWNER.getAuthority());
     }
+
 }

@@ -13,14 +13,16 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
     Optional<UserEntity> findByUsername(String username);
+
     Optional<UserEntity> findByNickname(String nickname);
 
     @Query("select u from UserEntity u where u.isDeleted = false and u.createdAt > :dateCursor")
     Page<UserEntity> findAllUserByIsDeletedFalse(LocalDateTime dateCursor, Pageable pageable);
 
-
     Optional<UserEntity> findByUsernameAndIsDeletedFalse(String username);
+
     Optional<UserEntity> findByNicknameAndIsDeletedFalse(String nickname);
+
     Optional<UserEntity> findByUuidAndIsDeletedFalse(UUID uuid);
 
 }

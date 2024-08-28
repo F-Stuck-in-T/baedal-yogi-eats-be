@@ -14,13 +14,17 @@ import java.util.UUID;
 @Getter
 public class PaymentEntity extends BaseEntity {
 
-
     @Enumerated(EnumType.STRING)
     private PaymentType status;
+
     private UUID userUuid;
+
     private UUID orderUuid;
+
     private UUID storeUuid;
+
     private Integer amount;
+
     private boolean isCancel = false;
 
     public PaymentEntity(PaymentType status, UUID orderUuid, UUID userUuid, UUID storeUuid, Integer amount) {
@@ -35,4 +39,5 @@ public class PaymentEntity extends BaseEntity {
         isCancel = true;
         return this;
     }
+
 }

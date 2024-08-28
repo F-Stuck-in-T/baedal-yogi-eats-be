@@ -13,10 +13,13 @@ import java.util.UUID;
 public class AiChats {
 
     private String question;
+
     private String answer;
+
     private UUID productUuid;
 
     public AiChatsEntity toEntity() {
         return new AiChatsEntity(question, answer, productUuid);
     }
+
 }

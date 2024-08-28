@@ -20,13 +20,15 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> registerAddress(@RequestBody AddressRequest addressDto, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> registerAddress(@RequestBody AddressRequest addressDto,
+            HttpServletRequest request) {
         AddressResponse data = addressService.registerAddress(addressDto, request);
         return ResponseEntity.ok(ApiResponse.success());
     }
 
     @GetMapping("/users/{userUuid}")
-    public ResponseEntity<ApiResponse<?>> getAddressListByUser(@PathVariable UUID userUuid, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> getAddressListByUser(@PathVariable UUID userUuid,
+            HttpServletRequest request) {
         List<AddressResponse> data = addressService.getAddressListByUser(userUuid, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
@@ -38,7 +40,8 @@ public class AddressController {
     }
 
     @PutMapping("/{addressId}")
-    public ResponseEntity<ApiResponse<?>> updateAddress(@PathVariable UUID addressId, @RequestBody AddressRequest addressRequest, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateAddress(@PathVariable UUID addressId,
+            @RequestBody AddressRequest addressRequest, HttpServletRequest request) {
         AddressResponse data = addressService.updateAddress(addressId, addressRequest, request);
         return ResponseEntity.ok(ApiResponse.success(data));
     }

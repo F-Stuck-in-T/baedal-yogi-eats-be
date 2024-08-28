@@ -1,6 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.payment.controller.v1.response;
 
-
 import com.fstuckint.baedalyogieats.core.api.payment.domain.PaymentResult;
 import com.fstuckint.baedalyogieats.storage.db.core.payment.PaymentEntity;
 import org.springframework.data.domain.Page;
