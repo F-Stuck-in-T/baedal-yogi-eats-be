@@ -1,7 +1,9 @@
 package com.fstuckint.baedalyogieats.core.api.common.jwt;
 
+
 import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.UserException;
+
 import com.fstuckint.baedalyogieats.storage.db.core.token.TokenBlacklist;
 import com.fstuckint.baedalyogieats.storage.db.core.token.TokenBlacklistRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserRole;
@@ -11,7 +13,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -96,6 +100,7 @@ public class JwtUtils {
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
 
     private String subStringToken(String token) {
         if (token != null)

@@ -40,6 +40,7 @@ public class UserService {
         userPilot.add(user);
     }
 
+
     @Transactional
     public void deleteToken(String bearerToken) {
         jwtUtils.addBlacklist(bearerToken);

@@ -34,6 +34,7 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
+
     /**
      * 당신은 필터로 대체되었습니다.
      *
@@ -55,6 +56,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> getUsers(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
             @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "createdAt") String sortKey,
+
             @RequestParam(defaultValue = "ASC") String direction) {
         UserPageResponse data = userService.getUserList(cursor, limit, sortKey, direction);
         return ResponseEntity.ok(ApiResponse.success(data));
