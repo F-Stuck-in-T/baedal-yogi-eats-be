@@ -6,16 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface AddressRepository extends JpaRepository<Address, UUID> {
+public interface AddressRepository extends JpaRepository<AddressEntity, UUID> {
 
-    List<Address> findAllByUsername(String username);
+    List<AddressEntity> findByUserUuidAndIsDeletedFalse(UUID userUuid);
 
-    List<Address> findAllByUsernameAndIsDeletedFalse(String username);
-
-    List<Address> findAllByUuidAndIsDeletedFalse(UUID uuid);
-
-    Optional<Address> findByUuidAndIsDeletedFalse(UUID uuid);
-
-    Optional<Address> findByUsernameAndIsDeletedFalse(String username);
+    Optional<AddressEntity> findByUuidAndIsDeletedFalse(UUID uuid);
 
 }

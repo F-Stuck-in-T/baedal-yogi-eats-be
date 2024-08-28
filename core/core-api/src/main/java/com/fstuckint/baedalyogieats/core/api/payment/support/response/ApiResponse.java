@@ -1,7 +1,7 @@
-package com.fstuckint.baedalyogieats.core.api.address.support.response;
+package com.fstuckint.baedalyogieats.core.api.payment.support.response;
 
-import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorMessage;
-import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorType;
+import com.fstuckint.baedalyogieats.core.api.payment.support.error.ErrorMessage;
+import com.fstuckint.baedalyogieats.core.api.payment.support.error.ErrorType;
 import lombok.Getter;
 
 @Getter
