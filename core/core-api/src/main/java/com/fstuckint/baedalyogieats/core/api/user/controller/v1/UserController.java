@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +34,20 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    @PostMapping("/authorization")
-    public ResponseEntity<ApiResponse<?>> createToken(@RequestBody LoginDto loginDto) {
-        String token = userService.createToken(loginDto);
-        return ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER, token).body(ApiResponse.success(token));
-    }
+    /**
+     * 당신은 필터로 대체되었습니다.
+     *
+     * @PostMapping("/authorization") public ResponseEntity<ApiResponse<?>>
+     * createToken(@RequestBody LoginDto loginDto) { log.info("절대 동작 안해!"); String token =
+     * userService.createToken(loginDto); return
+     * ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER,
+     * token).body(ApiResponse.success(token)); }
+     **/
 
     @DeleteMapping("/token")
-    public ResponseEntity<ApiResponse<?>> deleteToken(HttpServletRequest request) {
-        userService.deleteToken(request);
+    public ResponseEntity<ApiResponse<?>> deleteToken(
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+        userService.deleteToken(bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }
 
@@ -49,30 +55,29 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> getUsers(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
             @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "createdAt") String sortKey,
-            @RequestParam(defaultValue = "ASC") String direction, HttpServletRequest request) {
-        UserPageResponse data = userService.getUserList(cursor, limit, sortKey, direction, request);
+            @RequestParam(defaultValue = "ASC") String direction) {
+        UserPageResponse data = userService.getUserList(cursor, limit, sortKey, direction);
         return ResponseEntity.ok(ApiResponse.success(data));
 
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<?>> getUser(@PathVariable UUID uuid, HttpServletRequest request) {
-        UserResponse data = UserResponse.of(userService.getUser(uuid, request));
+    public ResponseEntity<ApiResponse<?>> getUser(@PathVariable UUID uuid) {
+        UserResponse data = UserResponse.of(userService.getUser(uuid));
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @PutMapping("/{uuid}")
-
     public ResponseEntity<ApiResponse<?>> updateUser(@PathVariable UUID uuid, @RequestBody UpdateUserDto updateUserDto,
-            HttpServletRequest request) {
-        UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, request));
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+        UserResponse data = UserResponse.of(userService.updateUser(uuid, updateUserDto, bearerToken));
         return ResponseEntity.ok(ApiResponse.success(data));
-
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid, HttpServletRequest request) {
-        userService.deleteUser(uuid, request);
+    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable UUID uuid,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+        userService.deleteUser(uuid, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }
 
