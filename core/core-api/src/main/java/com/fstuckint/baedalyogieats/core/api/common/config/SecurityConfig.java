@@ -97,6 +97,7 @@ public class SecurityConfig {
 
             .requestMatchers("/api/v1/ai/product/description")
             .hasAnyRole("OWNER", "MANAGER", "MASTER")
+
             // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
 
             .anyRequest()

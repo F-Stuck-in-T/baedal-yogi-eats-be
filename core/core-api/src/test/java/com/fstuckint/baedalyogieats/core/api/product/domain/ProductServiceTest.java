@@ -1,9 +1,12 @@
 package com.fstuckint.baedalyogieats.core.api.product.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fstuckint.baedalyogieats.core.api.product.support.Cursor;
 import com.fstuckint.baedalyogieats.storage.db.core.product.ProductEntity;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -26,6 +30,9 @@ class ProductServiceTest {
     @Mock
     private ProductFinder productFinder;
 
+    @Mock
+    private ProductReader productReader;
+
     private ProductService productService;
 
     @BeforeEach
@@ -34,7 +41,7 @@ class ProductServiceTest {
         this.storeUuid = UUID.randomUUID();
 
         MockitoAnnotations.openMocks(this);
-        productService = new ProductService(productRegister, productFinder);
+        productService = new ProductService(productRegister, productFinder, productReader);
     }
 
     @Test
@@ -81,6 +88,23 @@ class ProductServiceTest {
         assertThat(result.description()).isEqualTo(description);
         assertThat(result.unitPrice()).isEqualTo(unitPrice);
         assertThat(result.storeUuid()).isEqualTo(storeUuid);
+    }
+
+    @Test
+    void 상품_목록을_조회한다() {
+        // given
+        Cursor cursor = new Cursor(null, 10, "createdAt", Sort.Direction.ASC);
+        List<ProductResult> expectedResults = List.of(
+                new ProductResult(UUID.randomUUID(), "상품1", "설명1", 1000, UUID.randomUUID(), null, null),
+                new ProductResult(UUID.randomUUID(), "상품2", "설명2", 2000, UUID.randomUUID(), null, null));
+        when(productReader.read(cursor)).thenReturn(expectedResults);
+
+        // when
+        List<ProductResult> results = productService.read(cursor);
+
+        // then
+        assertThat(results).isEqualTo(expectedResults);
+        verify(productReader).read(cursor);
     }
 
 }
