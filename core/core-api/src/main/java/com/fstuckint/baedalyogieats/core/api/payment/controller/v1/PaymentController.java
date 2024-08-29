@@ -24,7 +24,7 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<?>> requestPayment(@RequestBody PaymentRequest paymentRequestDto,
-                                                         @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         PaymentResponse data = paymentService.requestPayment(paymentRequestDto, bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
@@ -33,7 +33,8 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<?>> getPaymentListByUser(@PathVariable UUID userUuid,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
             @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-            @RequestParam(defaultValue = "ASC") String direction, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestParam(defaultValue = "ASC") String direction,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         PaymentPageResponse data = paymentService.getPaymentListByUser(userUuid, cursor, limit, sortKey, direction,
                 bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
@@ -43,7 +44,8 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<?>> getPaymentListByOwner(@PathVariable UUID storeUuid,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
             @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-            @RequestParam(defaultValue = "ASC") String direction, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestParam(defaultValue = "ASC") String direction,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         PaymentPageResponse data = paymentService.getPaymentListByOwner(storeUuid, cursor, limit, sortKey, direction,
                 bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
@@ -53,13 +55,15 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<?>> getAllPayment(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime cursor,
             @RequestParam(defaultValue = "10") Integer limit, @RequestParam(defaultValue = "id") String sortKey,
-            @RequestParam(defaultValue = "ASC") String direction, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+            @RequestParam(defaultValue = "ASC") String direction,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         PaymentPageResponse data = paymentService.getAllPayment(cursor, limit, sortKey, direction, bearerToken);
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
     @DeleteMapping("/{paymentUuid}")
-    public ResponseEntity<ApiResponse<?>> cancelPayment(@PathVariable UUID paymentUuid, @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
+    public ResponseEntity<ApiResponse<?>> cancelPayment(@PathVariable UUID paymentUuid,
+            @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
         PaymentResponse data = paymentService.cancelPayment(paymentUuid, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }

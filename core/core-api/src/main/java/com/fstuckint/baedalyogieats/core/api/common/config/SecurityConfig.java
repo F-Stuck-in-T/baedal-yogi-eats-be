@@ -68,39 +68,38 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(req -> req.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .permitAll()
-                .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
-                .permitAll()
-                .requestMatchers("/api/v1/users/token")
-                .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.GET, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .permitAll()
+            .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
+            .permitAll()
+            .requestMatchers("/api/v1/users/token")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
 
-                .requestMatchers("/api/v1/address", "/api/v1/address/**", "/api/v1/address/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                .requestMatchers("/api/v1/address/admin")
-                .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers("/api/v1/address", "/api/v1/address/**", "/api/v1/address/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers("/api/v1/address/admin")
+            .hasAnyRole("MANAGER", "MASTER")
 
-                .requestMatchers("/api/v1/payments/users/**")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.POST, "/api/v1/payments")
-                .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.GET, "/api/v1/payment")
-                .hasAnyRole("MANAGER", "MASTER")
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/payments/**")
-                .hasAnyRole("MANAGER", "MASTER")
-                .requestMatchers("/api/v1/payments/stores/**")
-                .hasAnyRole("OWNER", "MANAGER", "MASTER")
+            .requestMatchers("/api/v1/payments/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.POST, "/api/v1/payments")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/payment")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/payments/**")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers("/api/v1/payments/stores/**")
+            .hasAnyRole("OWNER", "MANAGER", "MASTER")
 
+            // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
 
-
-                 // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
-
-                .anyRequest().permitAll());
+            .anyRequest()
+            .permitAll());
 
         http.exceptionHandling(eh -> eh.accessDeniedHandler(((request, response, accessDeniedException) -> {
             log.error(accessDeniedException.getMessage());

@@ -34,8 +34,10 @@ public class PaymentService {
 
     @Transactional
     public PaymentResponse requestPayment(PaymentRequest dto, String bearerToken) {
-        if (jwtUtils.checkAdmin(bearerToken)) return PaymentResponse.of(paymentPilot.requestPaymentAdmin(dto));
-        if (jwtUtils.checkCustomer(bearerToken)) return PaymentResponse.of(paymentPilot.requestPayment(dto, bearerToken));
+        if (jwtUtils.checkAdmin(bearerToken))
+            return PaymentResponse.of(paymentPilot.requestPaymentAdmin(dto));
+        if (jwtUtils.checkCustomer(bearerToken))
+            return PaymentResponse.of(paymentPilot.requestPayment(dto, bearerToken));
         throw new PaymentException(ErrorType.DEFAULT_ERROR);
     }
 
@@ -43,29 +45,38 @@ public class PaymentService {
     public PaymentPageResponse getPaymentListByUser(UUID userUuid, LocalDateTime cursor, Integer limit, String sortKey,
             String direction, String bearerToken) {
         if (jwtUtils.checkAdmin(bearerToken))
-            return PaymentResult.of(paymentPilot.getPaymentListByUserAdmin(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
+            return PaymentResult
+                .of(paymentPilot.getPaymentListByUserAdmin(userUuid, cursor, getSortedPage(limit, sortKey, direction)));
         if (jwtUtils.checkCustomer(bearerToken))
-            return PaymentResult.of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor, getSortedPage(limit, sortKey, direction), bearerToken));
+            return PaymentResult.of(paymentPilot.getPaymentListByUserUuid(userUuid, cursor,
+                    getSortedPage(limit, sortKey, direction), bearerToken));
         throw new PaymentException(ErrorType.DEFAULT_ERROR);
     }
 
     @Transactional(readOnly = true)
     public PaymentPageResponse getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, Integer limit,
             String sortKey, String direction, String bearerToken) {
-        if (jwtUtils.checkAdmin(bearerToken)) return PaymentResult.of(paymentPilot.getPaymentListByOwnerAdmin(storeUuid, cursor, getSortedPage(limit, sortKey, direction)));
-        if (jwtUtils.checkOwner(bearerToken)) return PaymentResult.of(paymentPilot.getPaymentListByOwner(storeUuid, cursor, getSortedPage(limit, sortKey, direction), bearerToken));
+        if (jwtUtils.checkAdmin(bearerToken))
+            return PaymentResult.of(paymentPilot.getPaymentListByOwnerAdmin(storeUuid, cursor,
+                    getSortedPage(limit, sortKey, direction)));
+        if (jwtUtils.checkOwner(bearerToken))
+            return PaymentResult.of(paymentPilot.getPaymentListByOwner(storeUuid, cursor,
+                    getSortedPage(limit, sortKey, direction), bearerToken));
         throw new PaymentException(ErrorType.DEFAULT_ERROR);
     }
 
     @Transactional(readOnly = true)
-    public PaymentPageResponse getAllPayment(LocalDateTime cursor, Integer limit, String sortKey, String direction, String bearToken) {
-        if (jwtUtils.checkAdmin(bearToken)) return PaymentResult.of(paymentPilot.getAllPayment(cursor, getSortedPage(limit, sortKey, direction)));
+    public PaymentPageResponse getAllPayment(LocalDateTime cursor, Integer limit, String sortKey, String direction,
+            String bearToken) {
+        if (jwtUtils.checkAdmin(bearToken))
+            return PaymentResult.of(paymentPilot.getAllPayment(cursor, getSortedPage(limit, sortKey, direction)));
         throw new PaymentException(ErrorType.DEFAULT_ERROR);
     }
 
     @Transactional
     public PaymentResponse cancelPayment(UUID paymentUuid, String bearerToken) {
-        if (jwtUtils.checkAdmin(bearerToken)) return PaymentResponse.of(paymentPilot.cancelPayment(paymentUuid));
+        if (jwtUtils.checkAdmin(bearerToken))
+            return PaymentResponse.of(paymentPilot.cancelPayment(paymentUuid));
         throw new PaymentException(ErrorType.DEFAULT_ERROR);
     }
 

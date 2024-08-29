@@ -25,52 +25,63 @@ public class PaymentPilot {
 
     private final PaymentRepository paymentRepository;
 
-     private final OrderRepository orderRepository;
-//     private final StoreRepository storeRepository;
+    private final OrderRepository orderRepository;
+
+    // private final StoreRepository storeRepository;
     private final JwtUtils jwtUtils;
 
     public PaymentResult requestPayment(PaymentRequest dto, String bearerToken) {
         String token = jwtUtils.subStringToken(bearerToken);
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        if (!dto.userUuid().equals(userUuid)) throw new PaymentException(ErrorType.TOKEN_ERROR);
-        OrderEntity orderEntity = orderRepository.findById(dto.orderUuid()).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+        if (!dto.userUuid().equals(userUuid))
+            throw new PaymentException(ErrorType.TOKEN_ERROR);
+        OrderEntity orderEntity = orderRepository.findById(dto.orderUuid())
+            .orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
         // requestDto 의 storeUuid 의 존재 여부 확인 ( storeRepository.findById )
-        return PaymentResult.of(paymentRepository.save(dto.toPayment().addAmount(orderEntity.getTotalPrice()).toEntity()));
+        return PaymentResult
+            .of(paymentRepository.save(dto.toPayment().addAmount(orderEntity.getTotalPrice()).toEntity()));
     }
 
     public PaymentResult requestPaymentAdmin(PaymentRequest dto) {
-        OrderEntity orderEntity = orderRepository.findById(dto.orderUuid()).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+        OrderEntity orderEntity = orderRepository.findById(dto.orderUuid())
+            .orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
         // 마찬가지로 requestDto 의 storeUuid 의 존재 여부 확인
-        return PaymentResult.of(paymentRepository.save(dto.toPayment().addAmount(orderEntity.getTotalPrice()).toEntity()));
+        return PaymentResult
+            .of(paymentRepository.save(dto.toPayment().addAmount(orderEntity.getTotalPrice()).toEntity()));
     }
 
-
-    public Page<PaymentEntity> getPaymentListByUserUuid(UUID userUuid, LocalDateTime cursor, PageRequest sortedPage, String bearerToken) {
+    public Page<PaymentEntity> getPaymentListByUserUuid(UUID userUuid, LocalDateTime cursor, PageRequest sortedPage,
+            String bearerToken) {
         String token = jwtUtils.subStringToken(bearerToken);
         UUID tokenUserUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        if (!userUuid.equals(tokenUserUuid)) throw new PaymentException(ErrorType.TOKEN_ERROR);
-        return paymentRepository.findAllByUserUuid(userUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        if (!userUuid.equals(tokenUserUuid))
+            throw new PaymentException(ErrorType.TOKEN_ERROR);
+        return paymentRepository.findAllByUserUuid(userUuid,
+                cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
     }
 
     public Page<PaymentEntity> getPaymentListByUserAdmin(UUID userUuid, LocalDateTime cursor, PageRequest sortedPage) {
-        return paymentRepository.findAllByUserUuid(userUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        return paymentRepository.findAllByUserUuid(userUuid,
+                cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
     }
 
-
-
-
-
-    public Page<PaymentEntity> getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage, String bearerToken) {
-        // StoreEntity storeEntity = storeRepository.findById(storeUuid).orElseThrow(() -> new PaymentException(ErrorType.NOT_FOUND_ERROR));
+    public Page<PaymentEntity> getPaymentListByOwner(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage,
+            String bearerToken) {
+        // StoreEntity storeEntity = storeRepository.findById(storeUuid).orElseThrow(() ->
+        // new PaymentException(ErrorType.NOT_FOUND_ERROR));
         String token = jwtUtils.subStringToken(bearerToken);
         UUID userUuid = UUID.fromString(jwtUtils.extractClaims(token).get(JwtUtils.CLAIMS_UUID).toString());
-        // if (!storeEntity.getUserUuid.equals(userUuid)) throw new PaymentException(ErrorType.TOKEN_ERROR);
+        // if (!storeEntity.getUserUuid.equals(userUuid)) throw new
+        // PaymentException(ErrorType.TOKEN_ERROR);
 
-        return paymentRepository.findAllByStoreUuid(storeUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+        return paymentRepository.findAllByStoreUuid(storeUuid,
+                cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
     }
 
-    public Page<PaymentEntity> getPaymentListByOwnerAdmin(UUID storeUuid, LocalDateTime cursor, PageRequest sortedPage) {
-        return paymentRepository.findAllByStoreUuid(storeUuid, cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
+    public Page<PaymentEntity> getPaymentListByOwnerAdmin(UUID storeUuid, LocalDateTime cursor,
+            PageRequest sortedPage) {
+        return paymentRepository.findAllByStoreUuid(storeUuid,
+                cursor == null ? LocalDateTime.of(2000, 1, 1, 0, 0) : cursor, sortedPage);
 
     }
 
@@ -85,7 +96,5 @@ public class PaymentPilot {
         paymentEntity.cancel();
         return PaymentResult.of(paymentEntity);
     }
-
-
 
 }
