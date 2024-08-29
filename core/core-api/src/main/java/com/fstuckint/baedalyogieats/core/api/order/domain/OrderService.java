@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
+import java.time.*;
 import java.util.*;
 
 @Service
@@ -70,4 +71,14 @@ public class OrderService {
         }
     }
 
+    @Transactional
+    public void orderCancel(UUID uuid) throws CoreApiException {
+        OrderEntity orderEntity = orderReader.getByUuid(uuid);
+        LocalDateTime createdAt = orderEntity.getCreatedAt();
+        if (createdAt.isBefore(createdAt.plusMinutes(5))) {
+            orderEntity.cancel();
+        } else {
+            throw new CoreApiException(ErrorType.CANCEL_TIME_OUT);
+        }
+    }
 }

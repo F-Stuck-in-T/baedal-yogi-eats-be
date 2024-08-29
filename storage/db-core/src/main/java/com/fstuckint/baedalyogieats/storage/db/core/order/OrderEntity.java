@@ -23,12 +23,14 @@ public class OrderEntity extends BaseEntity {
     private UUID buyerUuid;
 
     private Integer totalPrice;
+    private boolean isDeleted;
 
     @Builder
     public OrderEntity(Type type, UUID buyerUuid) {
         this.type = type;
         this.status = Status.PENDING;
         this.buyerUuid = buyerUuid;
+        this.isDeleted = false;
     }
 
     public void addTotalPrice(Integer totalPrice) {
@@ -51,4 +53,7 @@ public class OrderEntity extends BaseEntity {
         this.status = Status.DELIVERED;
     }
 
+    public void cancel() {
+        this.isDeleted = true;
+    }
 }
