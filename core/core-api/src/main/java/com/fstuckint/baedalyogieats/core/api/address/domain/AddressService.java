@@ -5,7 +5,6 @@ import com.fstuckint.baedalyogieats.core.api.address.controller.v1.response.Addr
 import com.fstuckint.baedalyogieats.core.api.address.support.error.AddressException;
 import com.fstuckint.baedalyogieats.core.api.address.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
-import com.fstuckint.baedalyogieats.core.api.common.jwt.UserChecker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AddressService {
-
-    private final UserChecker userChecker;
 
     private final AddressPilot addressPilot;
 

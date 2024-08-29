@@ -21,6 +21,11 @@ jwt:
   secretKey: YmFlZGFsLXlvZ2ktZWF0cy1iZS1zcHJpbmctYm9vdC1qYXZhLXRlbXBsYXRlLWJhY2tlbmQtc2VydmVy
   expiration: 3600_000
 
+gemini:
+  api:
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent
+    key: AIzaSyB1jhQqGXajdR8d4sQZcB2dy0GR5_-NVWE
+
 ---
 spring.config.activate.on-profile: local
 

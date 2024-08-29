@@ -16,6 +16,4 @@ public class AiChatsEntity extends BaseEntity {
 
     private String answer;
 
-    private UUID productUuid;
-
 }
