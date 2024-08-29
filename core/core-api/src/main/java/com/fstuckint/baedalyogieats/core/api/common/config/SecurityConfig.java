@@ -85,18 +85,19 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/address/admin")
             .hasAnyRole("MANAGER", "MASTER")
 
-            .requestMatchers("/api/v1/payments", "/api/v1/payments/users/**")
-            .hasAnyRole("CUSTOMER", "MANAGER", "ADMIN")
-            .requestMatchers("/api/v1/payments/stores/**")
-            .hasAnyRole("OWNER", "MANAGER", "MASTER")
-            .requestMatchers("/api/v1/payments")
+            .requestMatchers("/api/v1/payments/users/**")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.POST, "/api/v1/payments")
+            .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/payment")
             .hasAnyRole("MANAGER", "MASTER")
             .requestMatchers(HttpMethod.DELETE, "/api/v1/payments/**")
             .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers("/api/v1/payments/stores/**")
+            .hasAnyRole("OWNER", "MANAGER", "MASTER")
 
-            /**
-             * 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
-             */
+            // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
+
             .anyRequest()
             .permitAll());
 

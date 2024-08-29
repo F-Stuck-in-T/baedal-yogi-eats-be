@@ -35,8 +35,9 @@ public class Payment {
         this.storeUuid = storeUuid;
     }
 
-    public void addAmount(Integer amount) {
+    public Payment addAmount(Integer amount) {
         this.amount = amount;
+        return this;
     }
 
 }
