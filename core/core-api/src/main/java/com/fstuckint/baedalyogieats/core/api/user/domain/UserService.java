@@ -1,7 +1,5 @@
 package com.fstuckint.baedalyogieats.core.api.user.domain;
 
-import com.fstuckint.baedalyogieats.core.api.common.jwt.UserChecker;
-import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.LoginDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.SignupDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.request.UpdateUserDto;
 import com.fstuckint.baedalyogieats.core.api.user.controller.v1.response.UserPageResponse;
@@ -9,7 +7,6 @@ import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.user.support.error.UserException;
 import com.fstuckint.baedalyogieats.storage.db.core.user.UserEntity;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

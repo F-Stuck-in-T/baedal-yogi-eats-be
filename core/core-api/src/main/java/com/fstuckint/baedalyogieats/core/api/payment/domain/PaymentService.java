@@ -1,21 +1,14 @@
 package com.fstuckint.baedalyogieats.core.api.payment.domain;
 
-import com.fstuckint.baedalyogieats.core.api.common.jwt.UserChecker;
+import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
 import com.fstuckint.baedalyogieats.core.api.payment.controller.v1.request.PaymentRequest;
 import com.fstuckint.baedalyogieats.core.api.payment.controller.v1.response.PaymentPageResponse;
 import com.fstuckint.baedalyogieats.core.api.payment.controller.v1.response.PaymentResponse;
 import com.fstuckint.baedalyogieats.core.api.payment.support.error.ErrorType;
 import com.fstuckint.baedalyogieats.core.api.payment.support.error.PaymentException;
-import com.fstuckint.baedalyogieats.core.api.common.jwt.JwtUtils;
-import com.fstuckint.baedalyogieats.core.api.user.support.response.ApiResponse;
-import com.fstuckint.baedalyogieats.storage.db.core.payment.PaymentEntity;
-import com.fstuckint.baedalyogieats.storage.db.core.user.UserEntity;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +20,6 @@ import java.util.UUID;
 public class PaymentService {
 
     private final PaymentPilot paymentPilot;
-
-    private final UserChecker userChecker;
 
     private final JwtUtils jwtUtils;
 

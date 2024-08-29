@@ -11,8 +11,11 @@ public enum ErrorType {
             LogLevel.ERROR),
 
     BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, ErrorCode.E400, "bad request.", LogLevel.ERROR),
+
     TOKEN_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Token Error.", LogLevel.ERROR),
+
     NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, ErrorCode.E400, "Not found data.", LogLevel.ERROR),
+
     ROLE_ERROR(HttpStatus.UNAUTHORIZED, ErrorCode.E400, "Not valid role.", LogLevel.ERROR);
 
     private final HttpStatus status;
