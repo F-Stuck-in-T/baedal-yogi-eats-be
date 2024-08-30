@@ -24,15 +24,14 @@ public class OrderService {
 
         OrderEntity orderEntity = command.toEntity();
 
+        BuyerEntity buyerEntity = command.getBuyer().toEntity();
+
         List<OrderItemEntity> orderItemEntities = command.getOrderItems()
             .stream()
             .map(orderItem -> orderItem.toEntity(orderEntity))
             .toList();
 
-        BuyerEntity buyerEntity = command.getBuyer().toEntity();
-
         OrderEntity storedOrder = orderStore.storeOrderAgg(orderEntity, orderItemEntities, buyerEntity);
-        storedOrder.addBuyer(buyerEntity.getUuid());
         storedOrder.addTotalPrice(orderItemEntities.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
 
         return new OrderInfo(storedOrder);
