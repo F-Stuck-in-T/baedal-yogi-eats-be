@@ -115,6 +115,18 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.DELETE, "/api/v1/announcement/**")
             .hasAnyRole("MANAGER", "MASTER")
 
+            // CustomerReport
+            .requestMatchers(HttpMethod.POST, "/api/v1/report")
+            .hasAnyRole("CUSTOMER", "OWNER")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/report/**")
+            .hasAnyRole("CUSTOMER", "OWNER")
+            .requestMatchers(HttpMethod.POST, "/api/v1/report/**")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/report")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers("/api/v1/report/**")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+
             // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
 
             .anyRequest()
