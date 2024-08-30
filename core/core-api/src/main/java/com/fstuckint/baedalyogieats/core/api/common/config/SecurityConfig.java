@@ -68,6 +68,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(req -> req.requestMatchers(PathRequest.toStaticResources().atCommonLocations())
             .permitAll()
+
+            // USER
             .requestMatchers("/api/v1/users", "/api/v1/users/authorization")
             .permitAll()
             .requestMatchers("/api/v1/users/token")
@@ -79,11 +81,13 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**")
             .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
 
+            // ADRESS
             .requestMatchers("/api/v1/address", "/api/v1/address/**", "/api/v1/address/users/**")
             .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
             .requestMatchers("/api/v1/address/admin")
             .hasAnyRole("MANAGER", "MASTER")
 
+            // PAYMENT
             .requestMatchers("/api/v1/payments/users/**")
             .hasAnyRole("CUSTOMER", "MANAGER", "MASTER")
             .requestMatchers(HttpMethod.POST, "/api/v1/payments")
@@ -95,8 +99,21 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/payments/stores/**")
             .hasAnyRole("OWNER", "MANAGER", "MASTER")
 
+            // AI
             .requestMatchers("/api/v1/ai/product/description")
             .hasAnyRole("OWNER", "MANAGER", "MASTER")
+
+            // ANNOUNCEMENT
+            .requestMatchers(HttpMethod.GET, "/api/v1/announcement/**")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.GET, "/api/v1/announcement")
+            .hasAnyRole("CUSTOMER", "OWNER", "MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/announcement/**")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.POST, "/api/v1/announcement")
+            .hasAnyRole("MANAGER", "MASTER")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/announcement/**")
+            .hasAnyRole("MANAGER", "MASTER")
 
             // 나머지 API 도 추후 완성되면 추가 예정 ( 완성 전까지 PermitAll() )
 

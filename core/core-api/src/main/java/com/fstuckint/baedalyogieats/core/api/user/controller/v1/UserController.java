@@ -34,16 +34,6 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    /**
-     * 당신은 필터로 대체되었습니다.
-     *
-     * @PostMapping("/authorization") public ResponseEntity<ApiResponse<?>>
-     * createToken(@RequestBody LoginDto loginDto) { log.info("절대 동작 안해!"); String token =
-     * userService.createToken(loginDto); return
-     * ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER,
-     * token).body(ApiResponse.success(token)); }
-     **/
-
     @DeleteMapping("/token")
     public ResponseEntity<ApiResponse<?>> deleteToken(
             @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {
@@ -80,5 +70,15 @@ public class UserController {
         userService.deleteUser(uuid, bearerToken);
         return ResponseEntity.ok(ApiResponse.success());
     }
+
+    /**
+     * 당신은 필터로 대체되었습니다.
+     *
+     * @PostMapping("/authorization") public ResponseEntity<ApiResponse<?>>
+     * createToken(@RequestBody LoginDto loginDto) { log.info("절대 동작 안해!"); String token =
+     * userService.createToken(loginDto); return
+     * ResponseEntity.ok().header(JwtUtils.AUTHORIZATION_HEADER,
+     * token).body(ApiResponse.success(token)); }
+     **/
 
 }
