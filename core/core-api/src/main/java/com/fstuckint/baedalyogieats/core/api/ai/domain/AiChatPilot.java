@@ -34,16 +34,6 @@ public class AiChatPilot {
         String aiResponse = createAiResponse(question);
         aiChatsRepository.save(new AiChatsEntity(question, aiResponse));
         return aiResponse;
-
-        /**
-         * 뭐지? merge?
-         *
-         * Controller 에서 String 으로만 받아서 GEMINI 호출하면 Json 형태로 받아와서 ObjectMapper.readTree 로
-         * contents 추출했는데
-         *
-         * record 로 바꿔서 Http Body 부분 받으니 GEMINI 가 String 만 딱 보냄;;
-         *
-         */
     }
 
     private String createAiResponse(String text) {
