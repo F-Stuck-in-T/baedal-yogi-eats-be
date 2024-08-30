@@ -20,8 +20,9 @@ public class OrderStore {
             BuyerEntity buyerEntity) {
 
         OrderEntity savedOrder = orderRepository.save(orderEntity);
+        BuyerEntity savedBuyer = buyerRepository.save(buyerEntity);
+        savedOrder.addBuyer(savedBuyer.getUuid());
         orderItemRepository.saveAll(orderItemEntities);
-        buyerRepository.save(buyerEntity);
 
         return savedOrder;
     }
