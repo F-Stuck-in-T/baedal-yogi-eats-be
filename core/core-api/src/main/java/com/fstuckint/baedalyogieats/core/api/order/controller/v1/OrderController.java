@@ -41,4 +41,10 @@ public class OrderController {
         return ApiResponse.success(null);
     }
 
+    @DeleteMapping("/{orderUuid}")
+    public ApiResponse orderCancel(@PathVariable("orderUuid") UUID uuid) {
+        orderService.orderCancel(uuid);
+        return ApiResponse.success(null);
+    }
+
 }

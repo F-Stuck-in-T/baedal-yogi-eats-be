@@ -5,6 +5,7 @@ import com.fstuckint.baedalyogieats.storage.db.core.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.*;
 import java.util.*;
 
 @Getter
@@ -24,11 +25,14 @@ public class OrderEntity extends BaseEntity {
 
     private Integer totalPrice;
 
+    private boolean isDeleted;
+
     @Builder
     public OrderEntity(Type type, UUID buyerUuid) {
         this.type = type;
         this.status = Status.PENDING;
         this.buyerUuid = buyerUuid;
+        this.isDeleted = false;
     }
 
     public void addTotalPrice(Integer totalPrice) {
@@ -49,6 +53,26 @@ public class OrderEntity extends BaseEntity {
 
     public void delivered() {
         this.status = Status.DELIVERED;
+    }
+
+    public void cancel() {
+        this.isDeleted = true;
+    }
+
+    public boolean isPending() {
+        return this.status == Status.PENDING ? true : false;
+    }
+
+    public boolean isReceived() {
+        return this.status == Status.RECEIVED ? true : false;
+    }
+
+    public boolean isShipping() {
+        return this.status == Status.SHIPPING ? true : false;
+    }
+
+    public boolean isCancelTimeout(LocalDateTime cancelTime) {
+        return cancelTime.isBefore(this.getCreatedAt().plusMinutes(5));
     }
 
 }
