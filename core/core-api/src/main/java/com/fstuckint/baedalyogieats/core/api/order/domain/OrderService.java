@@ -41,44 +41,37 @@ public class OrderService {
     @Transactional
     public void changeOrderReceived(UUID uuid) {
         OrderEntity orderEntity = orderReader.getByUuid(uuid);
-        if (orderEntity.getStatus() == Status.PENDING) {
-            orderEntity.received();
-        }
-        else {
+        if (!orderEntity.isPending()) {
             throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
         }
+        orderEntity.received();
     }
 
     @Transactional
     public void changeOrderShipping(UUID uuid) {
         OrderEntity orderEntity = orderReader.getByUuid(uuid);
-        if (orderEntity.getStatus() == Status.RECEIVED) {
-            orderEntity.shipping();
-        }
-        else {
+        if (!orderEntity.isReceived()) {
             throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
         }
+        orderEntity.shipping();
     }
 
     @Transactional
     public void changeOrderDelivered(UUID uuid) {
         OrderEntity orderEntity = orderReader.getByUuid(uuid);
-        if (orderEntity.getStatus() == Status.SHIPPING) {
-            orderEntity.delivered();
-        }
-        else {
+        if (!orderEntity.isShipping()) {
             throw new CoreApiException(ErrorType.INVALID_STATUS_CHANGE);
         }
+        orderEntity.delivered();
     }
 
     @Transactional
     public void orderCancel(UUID uuid) throws CoreApiException {
         OrderEntity orderEntity = orderReader.getByUuid(uuid);
-        LocalDateTime createdAt = orderEntity.getCreatedAt();
-        if (createdAt.isBefore(createdAt.plusMinutes(5))) {
-            orderEntity.cancel();
-        } else {
+        if (orderEntity.isCancelTimeout(LocalDateTime.now())) {
             throw new CoreApiException(ErrorType.CANCEL_TIME_OUT);
         }
+        orderEntity.cancel();
     }
+
 }
