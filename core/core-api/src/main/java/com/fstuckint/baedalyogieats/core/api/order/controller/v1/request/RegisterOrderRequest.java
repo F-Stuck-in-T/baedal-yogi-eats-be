@@ -5,11 +5,12 @@ import com.fstuckint.baedalyogieats.core.api.order.domain.dto.RegisterOrderComma
 import com.fstuckint.baedalyogieats.core.enums.order.*;
 import lombok.*;
 
+import java.io.*;
 import java.util.*;
 
 @Getter
 @NoArgsConstructor
-public class RegisterOrderRequest {
+public class RegisterOrderRequest implements Serializable {
 
     private Type type;
 
