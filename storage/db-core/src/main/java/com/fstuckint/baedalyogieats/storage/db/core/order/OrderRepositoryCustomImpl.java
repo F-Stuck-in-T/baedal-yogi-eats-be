@@ -58,7 +58,8 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        booleanBuilder.and(orderEntity.storeUuid.eq(storeUuid));
+        booleanBuilder.and(orderEntity.storeUuid.eq(storeUuid))
+                .and(orderEntity.isDeleted.eq(false));
 
         JPAQuery<OrderEntity> query = jpaQueryFactory.selectFrom(orderEntity)
                 .where(booleanBuilder)
