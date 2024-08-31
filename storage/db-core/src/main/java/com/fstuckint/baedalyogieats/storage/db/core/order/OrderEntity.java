@@ -16,22 +16,25 @@ public class OrderEntity extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private OrderType orderType;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus orderStatus;
 
+    @Column(nullable = false)
     private UUID buyerUuid;
+    @Column(nullable = false)
+    private UUID storeUuid;
 
     private Integer totalPrice;
 
     private boolean isDeleted;
 
     @Builder
-    public OrderEntity(Type type, UUID buyerUuid) {
-        this.type = type;
-        this.status = Status.PENDING;
-        this.buyerUuid = buyerUuid;
+    public OrderEntity(OrderType orderType, UUID storeUuid) {
+        this.orderType = orderType;
+        this.orderStatus = OrderStatus.PENDING;
+        this.storeUuid = storeUuid;
         this.isDeleted = false;
     }
 
@@ -44,15 +47,15 @@ public class OrderEntity extends BaseEntity {
     }
 
     public void received() {
-        this.status = Status.RECEIVED;
+        this.orderStatus = OrderStatus.RECEIVED;
     }
 
     public void shipping() {
-        this.status = Status.SHIPPING;
+        this.orderStatus = OrderStatus.SHIPPING;
     }
 
     public void delivered() {
-        this.status = Status.DELIVERED;
+        this.orderStatus = OrderStatus.DELIVERED;
     }
 
     public void cancel() {
@@ -60,15 +63,15 @@ public class OrderEntity extends BaseEntity {
     }
 
     public boolean isPending() {
-        return this.status == Status.PENDING ? true : false;
+        return this.orderStatus == OrderStatus.PENDING ? true : false;
     }
 
     public boolean isReceived() {
-        return this.status == Status.RECEIVED ? true : false;
+        return this.orderStatus == OrderStatus.RECEIVED ? true : false;
     }
 
     public boolean isShipping() {
-        return this.status == Status.SHIPPING ? true : false;
+        return this.orderStatus == OrderStatus.SHIPPING ? true : false;
     }
 
     public boolean isCancelTimeout(LocalDateTime cancelTime) {

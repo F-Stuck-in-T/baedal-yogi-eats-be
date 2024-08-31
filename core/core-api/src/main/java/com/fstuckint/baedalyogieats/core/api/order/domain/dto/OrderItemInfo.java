@@ -8,14 +8,12 @@ import java.util.*;
 @Getter
 @Builder
 public class OrderItemInfo {
-    private UUID orderItemUuid;
     private String name;
     private Integer unitPrice;
     private UUID productUuid;
 
     public static OrderItemInfo of(OrderItemEntity orderItemEntity) {
         return OrderItemInfo.builder()
-                .orderItemUuid(orderItemEntity.getUuid())
                 .name(orderItemEntity.getName())
                 .unitPrice(orderItemEntity.getUnitPrice())
                 .productUuid(orderItemEntity.getProductUuid())

@@ -6,4 +6,6 @@ import java.util.*;
 
 public interface OrderRepositoryCustom {
     List<OrderEntity> findByBuyer(UUID userId, Pageable pageable);
+
+    List<OrderEntity> findByStore(UUID storeUuid, Pageable pageable);
 }

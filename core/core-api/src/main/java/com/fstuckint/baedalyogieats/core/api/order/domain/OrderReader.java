@@ -24,28 +24,31 @@ public class OrderReader {
     }
 
     public OrderDetailsInfo getOrderAgg(UUID uuid) {
-        OrderEntity orderEntity = orderRepository.findById(uuid).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY));
-        BuyerEntity buyerEntity = buyerRepository.findById(orderEntity.getBuyerUuid()).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY));
-        List<OrderItemEntity> orderItemEntities = orderItemRepository.findByOrderUuid(orderEntity.getUuid());
-        return OrderDetailsInfo.of(orderEntity, buyerEntity, orderItemEntities);
+        OrderEntity order = orderRepository.findById(uuid).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY));
+        BuyerEntity buyer = buyerRepository.findById(order.getBuyerUuid()).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY));
+        List<OrderItemEntity> orderItems = orderItemRepository.findByOrderUuid(order.getUuid());
+        return OrderDetailsInfo.of(order, buyer, orderItems);
     }
 
     public List<OrderDetailsInfo> findOrderAgg(Pageable pageable) {
-        Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
-        List<OrderEntity> orders = orderEntities.getContent();
+        Page<OrderEntity> orderPages = orderRepository.findAll(pageable);
+        List<OrderEntity> orders = orderPages.getContent();
         Map<UUID, BuyerEntity> buyerMap = orders.stream().collect(Collectors.toMap(BaseEntity::getUuid, order -> buyerRepository.findById(order.getBuyerUuid()).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY))));
         Map<UUID, List<OrderItemEntity>> orderItemsMap = orders.stream().collect(Collectors.toMap(OrderEntity::getUuid, orderEntity -> orderItemRepository.findByOrderUuid(orderEntity.getUuid())));
-        return orderEntities.stream().map(orderEntity -> OrderDetailsInfo.of(orderEntity, buyerMap.get(orderEntity.getUuid()), orderItemsMap.get(orderEntity.getUuid()))).toList();
+        return orderPages.stream().map(order -> OrderDetailsInfo.of(order, buyerMap.get(order.getUuid()), orderItemsMap.get(order.getUuid()))).toList();
     }
 
     public List<OrderDetailsInfo> findOrderAggByUser(UUID userId, Pageable pageable) {
         List<OrderEntity> orders = orderRepository.findByBuyer(userId, pageable);
         Map<UUID, BuyerEntity> buyerMap = orders.stream().collect(Collectors.toMap(BaseEntity::getUuid, order -> buyerRepository.findById(order.getBuyerUuid()).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY))));
-        Map<UUID, List<OrderItemEntity>> orderItemsMap = orders.stream().collect(Collectors.toMap(OrderEntity::getUuid, orderEntity -> orderItemRepository.findByOrderUuid(orderEntity.getUuid())));
+        Map<UUID, List<OrderItemEntity>> orderItemsMap = orders.stream().collect(Collectors.toMap(OrderEntity::getUuid, order -> orderItemRepository.findByOrderUuid(order.getUuid())));
         return orders.stream().map(orderEntity -> OrderDetailsInfo.of(orderEntity, buyerMap.get(orderEntity.getUuid()), orderItemsMap.get(orderEntity.getUuid()))).toList();
     }
 
     public List<OrderDetailsInfo> findOrderAggByStore(UUID storeId, Pageable pageable) {
-        return null;
+        List<OrderEntity> orders = orderRepository.findByStore(storeId, pageable);
+        Map<UUID, BuyerEntity> buyerMap = orders.stream().collect(Collectors.toMap(BaseEntity::getUuid, order -> buyerRepository.findById(order.getBuyerUuid()).orElseThrow(() -> new CoreApiException(ErrorType.NOT_FOUND_ENTITY))));
+        Map<UUID, List<OrderItemEntity>> orderItemsMap = orders.stream().collect(Collectors.toMap(OrderEntity::getUuid, order -> orderItemRepository.findByOrderUuid(order.getUuid())));
+        return orders.stream().map(orderEntity -> OrderDetailsInfo.of(orderEntity, buyerMap.get(orderEntity.getUuid()), orderItemsMap.get(orderEntity.getUuid()))).toList();
     }
 }

@@ -18,37 +18,37 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping
+    @PostMapping // 주문 요청
     public ApiResponse<RegisterOrderResponse> registerOrder(@RequestBody RegisterOrderRequest request) {
-        OrderInfo info = orderService.registerOrder(request.toCommand());
-        return ApiResponse.success(RegisterOrderResponse.of(info));
+        UUID uuid = orderService.registerOrder(request.toCommand());
+        return ApiResponse.success(new RegisterOrderResponse(uuid));
     }
 
-    @PutMapping("/{orderUuid}/received")
+    @PutMapping("/{orderUuid}/received") // 주문 접수완료
     public ApiResponse changeReceived(@PathVariable("orderUuid") UUID uuid) {
         orderService.changeOrderReceived(uuid);
         return ApiResponse.success(null);
     }
 
-    @PutMapping("/{orderUuid}/shipping")
+    @PutMapping("/{orderUuid}/shipping") // 주문 배송중
     public ApiResponse changeShipping(@PathVariable("orderUuid") UUID uuid) {
         orderService.changeOrderShipping(uuid);
         return ApiResponse.success(null);
     }
 
-    @PutMapping("/{orderUuid}/delivered")
+    @PutMapping("/{orderUuid}/delivered") // 주문 배송완료
     public ApiResponse changeDelivered(@PathVariable("orderUuid") UUID uuid) {
         orderService.changeOrderDelivered(uuid);
         return ApiResponse.success(null);
     }
 
-    @DeleteMapping("/{orderUuid}")
+    @DeleteMapping("/{orderUuid}") // 주문 취소
     public ApiResponse orderCancel(@PathVariable("orderUuid") UUID uuid) {
         orderService.orderCancel(uuid);
         return ApiResponse.success(null);
     }
 
-    @GetMapping("/{orderUuid}")
+    @GetMapping("/{orderUuid}") // 상세 조회
     public ApiResponse<OrderDetailsInfo> retrieveOrderDetails(@PathVariable("orderUuid") UUID uuid) {
         OrderDetailsInfo orderDetailsInfo = orderService.retrieveOrderDetails(uuid);
         return ApiResponse.success(orderDetailsInfo);
@@ -66,9 +66,9 @@ public class OrderController {
         return ApiResponse.success(orderDetailsInfos);
     }
 
-    @GetMapping("/stores/{storeId}") // 가게 주문 조회
-    public ApiResponse retrieveOrderListOwner(@PathVariable("storedId") UUID storeId, Pageable pageable) {
-        orderService.retrieveOrderListStore(storeId, pageable);
-        return ApiResponse.success();
+    @GetMapping("/stores/{storeUuid}") // 가게 주문 조회
+    public ApiResponse retrieveOrderListOwner(@PathVariable("storeUuid") UUID storeUuid, Pageable pageable) {
+        List<OrderDetailsInfo> orderDetailsInfos = orderService.retrieveOrderListStore(storeUuid, pageable);
+        return ApiResponse.success(orderDetailsInfos);
     }
 }

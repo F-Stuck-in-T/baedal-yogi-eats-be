@@ -19,31 +19,21 @@ public class OrderService {
 
     private final OrderReader orderReader;
 
-
-    private final OrderRepository orderRepository;
-
-    private final OrderItemRepository orderItemRepository;
-
-    private final BuyerRepository buyerRepository;
-
     @Transactional
-    public OrderInfo registerOrder(RegisterOrderCommand command) {
+    public UUID registerOrder(RegisterOrderCommand command) {
 
-        OrderEntity orderEntity = command.toEntity();
+        OrderEntity initOrder = command.toEntity();
 
-        BuyerEntity buyerEntity = command.getBuyer().toEntity();
+        BuyerEntity initBuyer = command.getBuyer().toEntity();
 
-        List<OrderItemEntity> orderItemEntities = command.getOrderItems()
+        List<OrderItemEntity> initOrderItems = command.getOrderItems()
             .stream()
-            .map(orderItem -> orderItem.toEntity(orderEntity))
+            .map(orderItemCommand -> orderItemCommand.toEntity(initOrder))
             .toList();
 
-        OrderEntity storedOrder = orderStore.storeOrderAgg(orderEntity, orderItemEntities, buyerEntity);
-        storedOrder.addTotalPrice(orderItemEntities.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
+        OrderEntity order = orderStore.storeOrderAgg(initOrder, initBuyer, initOrderItems);
 
-        System.out.println("storedOrder = " + storedOrder.getBuyerUuid());
-
-        return new OrderInfo(storedOrder);
+        return order.getUuid();
     }
 
     @Transactional
@@ -92,10 +82,12 @@ public class OrderService {
         return orderReader.findOrderAgg(pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDetailsInfo> retrieveOrderListUser(UUID storeId, Pageable pageable) {
         return orderReader.findOrderAggByUser(storeId, pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDetailsInfo> retrieveOrderListStore(UUID storeId, Pageable pageable) {
         return orderReader.findOrderAggByStore(storeId, pageable);
     }

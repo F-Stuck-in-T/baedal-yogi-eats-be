@@ -11,14 +11,16 @@ import java.util.*;
 @AllArgsConstructor
 public class RegisterOrderCommand {
 
-    private Type type;
+    private OrderType orderType;
 
     private RegisterBuyerCommand buyer;
+
+    private UUID storeUuid;
 
     private List<RegisterOrderItemCommand> orderItems = new ArrayList<>();
 
     public OrderEntity toEntity() {
-        return OrderEntity.builder().type(this.type).build();
+        return OrderEntity.builder().orderType(this.orderType).storeUuid(this.storeUuid).build();
     }
 
     @Getter

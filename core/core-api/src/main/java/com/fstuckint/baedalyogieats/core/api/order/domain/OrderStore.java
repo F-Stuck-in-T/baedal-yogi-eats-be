@@ -16,15 +16,17 @@ public class OrderStore {
 
     private final BuyerRepository buyerRepository;
 
-    public OrderEntity storeOrderAgg(OrderEntity orderEntity, List<OrderItemEntity> orderItemEntities,
-            BuyerEntity buyerEntity) {
+    public OrderEntity storeOrderAgg(OrderEntity initOrder, BuyerEntity initBuyer
+            , List<OrderItemEntity> initOrderItems) {
 
-        OrderEntity savedOrder = orderRepository.save(orderEntity);
-        BuyerEntity savedBuyer = buyerRepository.save(buyerEntity);
-        savedOrder.addBuyer(savedBuyer.getUuid());
-        orderItemRepository.saveAll(orderItemEntities);
+        BuyerEntity buyer = buyerRepository.save(initBuyer);
+        initOrder.addBuyer(initBuyer.getUuid());
+        OrderEntity order = orderRepository.save(initOrder);
+        List<OrderItemEntity> orderItem = orderItemRepository.saveAll(initOrderItems);
+        order.addBuyer(buyer.getUuid());
+        order.addTotalPrice(orderItem.stream().mapToInt(OrderItemEntity::getUnitPrice).sum());
 
-        return savedOrder;
+        return order;
     }
 
 }
