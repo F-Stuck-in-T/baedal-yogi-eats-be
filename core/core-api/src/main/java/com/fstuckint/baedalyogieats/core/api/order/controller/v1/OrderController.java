@@ -6,6 +6,7 @@ import com.fstuckint.baedalyogieats.core.api.order.domain.*;
 import com.fstuckint.baedalyogieats.core.api.order.domain.dto.*;
 import com.fstuckint.baedalyogieats.core.api.order.support.response.*;
 import lombok.*;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -47,4 +48,27 @@ public class OrderController {
         return ApiResponse.success(null);
     }
 
+    @GetMapping("/{orderUuid}")
+    public ApiResponse<OrderDetailsInfo> retrieveOrderDetails(@PathVariable("orderUuid") UUID uuid) {
+        OrderDetailsInfo orderDetailsInfo = orderService.retrieveOrderDetails(uuid);
+        return ApiResponse.success(orderDetailsInfo);
+    }
+
+    @GetMapping // 관리자 주문 조회
+    public ApiResponse<List<OrderDetailsInfo>> retrieveOrderList(Pageable pageable) {
+        List<OrderDetailsInfo> orderDetailsInfos = orderService.retrieveOrderList(pageable);
+        return ApiResponse.success(orderDetailsInfos);
+    }
+
+    @GetMapping("/users/{userId}") // 유저 주문 조회
+    public ApiResponse retrieveOrderListUser(@PathVariable("userId") UUID userId, Pageable pageable) {
+        List<OrderDetailsInfo> orderDetailsInfos = orderService.retrieveOrderListUser(userId, pageable);
+        return ApiResponse.success(orderDetailsInfos);
+    }
+
+    @GetMapping("/stores/{storeId}") // 가게 주문 조회
+    public ApiResponse retrieveOrderListOwner(@PathVariable("storedId") UUID storeId, Pageable pageable) {
+        orderService.retrieveOrderListStore(storeId, pageable);
+        return ApiResponse.success();
+    }
 }

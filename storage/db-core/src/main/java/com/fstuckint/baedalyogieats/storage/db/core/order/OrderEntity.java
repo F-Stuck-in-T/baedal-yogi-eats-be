@@ -15,12 +15,12 @@ import java.util.*;
 public class OrderEntity extends BaseEntity {
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(nullable = false)
     private UUID buyerUuid;
 
     private Integer totalPrice;
@@ -72,7 +72,7 @@ public class OrderEntity extends BaseEntity {
     }
 
     public boolean isCancelTimeout(LocalDateTime cancelTime) {
-        return cancelTime.isBefore(this.getCreatedAt().plusMinutes(5));
+        return cancelTime.isAfter(this.getCreatedAt().plusMinutes(5));
     }
 
 }
