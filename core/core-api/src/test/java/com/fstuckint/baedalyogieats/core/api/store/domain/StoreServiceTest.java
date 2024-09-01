@@ -1,10 +1,14 @@
 package com.fstuckint.baedalyogieats.core.api.store.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fstuckint.baedalyogieats.core.api.store.support.Cursor;
 import com.fstuckint.baedalyogieats.storage.db.core.store.CategoryEntity;
 import com.fstuckint.baedalyogieats.storage.db.core.store.StoreEntity;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -12,6 +16,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -29,6 +34,9 @@ class StoreServiceTest {
     @Mock
     private StoreFinder storeFinder;
 
+    @Mock
+    private StoreReader storeReader;
+
     private StoreService storeService;
 
     @BeforeEach
@@ -38,7 +46,7 @@ class StoreServiceTest {
         this.storeUuid = UUID.randomUUID();
 
         MockitoAnnotations.openMocks(this);
-        storeService = new StoreService(storeRegister, storeFinder);
+        storeService = new StoreService(storeRegister, storeFinder, storeReader);
     }
 
     @Test
@@ -103,6 +111,25 @@ class StoreServiceTest {
         assertThat(result.fullAddress()).isEqualTo(fullAddress);
         assertThat(result.categoryUuid()).isEqualTo(categoryUuid);
         assertThat(result.categoryName()).isEqualTo(categoryName);
+    }
+
+    @Test
+    void 가게_목록을_조회한다() {
+        // given
+        Cursor cursor = new Cursor(null, 10, "createdAt", Sort.Direction.ASC);
+        List<StoreResult> expectedResults = List.of(
+                new StoreResult(UUID.randomUUID(), "가게1", "가게 설명", "주소", UUID.randomUUID(), "한식", UUID.randomUUID(),
+                        LocalDateTime.now(), LocalDateTime.now()),
+                new StoreResult(UUID.randomUUID(), "가게2", "가게 설명", "주소", UUID.randomUUID(), "한식", UUID.randomUUID(),
+                        LocalDateTime.now(), LocalDateTime.now()));
+        when(storeReader.read(cursor)).thenReturn(expectedResults);
+
+        // when
+        List<StoreResult> results = storeService.read(cursor);
+
+        // then
+        assertThat(results).isEqualTo(expectedResults);
+        verify(storeReader).read(cursor);
     }
 
 }
