@@ -30,3 +30,23 @@ include::{snippets}/가게 등록/http-response.adoc[]
 === Response Fields
 
 include::{snippets}/가게 등록/response-fields.adoc[]
+
+== 가게 조회
+
+=== 가게 상세 조회
+
+==== Curl Request
+
+include::{snippets}/가게 상세 조회/curl-request.adoc[]
+
+==== Http Request
+
+include::{snippets}/가게 상세 조회/http-request.adoc[]
+
+==== Http Response
+
+include::{snippets}/가게 상세 조회/http-response.adoc[]
+
+==== Response Fields
+
+include::{snippets}/가게 상세 조회/response-fields.adoc[]

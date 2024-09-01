@@ -9,6 +9,9 @@ import com.fstuckint.baedalyogieats.core.api.store.domain.Store;
 import com.fstuckint.baedalyogieats.core.api.store.domain.StoreResult;
 import com.fstuckint.baedalyogieats.core.api.store.domain.StoreService;
 import com.fstuckint.baedalyogieats.core.api.user.domain.CurrentUser;
+import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +32,12 @@ public class StoreController {
         Store store = request.toStore();
         OwnerStore ownerStore = new OwnerStore(owner, store);
         StoreResult result = storeService.register(ownerStore);
+        return ApiResponse.success(StoreResponse.of(result));
+    }
+
+    @GetMapping("/api/v1/stores/{storeUuid}")
+    public ApiResponse<StoreResponse> findStore(@PathVariable String storeUuid) {
+        StoreResult result = storeService.find(UUID.fromString(storeUuid));
         return ApiResponse.success(StoreResponse.of(result));
     }
 
