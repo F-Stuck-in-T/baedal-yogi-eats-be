@@ -1,7 +1,6 @@
 package com.fstuckint.baedalyogieats.storage.db.core.store;
 
 import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
-import com.fstuckint.baedalyogieats.storage.db.core.category.CategoryEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,4 +1,4 @@
-package com.fstuckint.baedalyogieats.storage.db.core.category;
+package com.fstuckint.baedalyogieats.storage.db.core.store;
 
 import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.Column;
