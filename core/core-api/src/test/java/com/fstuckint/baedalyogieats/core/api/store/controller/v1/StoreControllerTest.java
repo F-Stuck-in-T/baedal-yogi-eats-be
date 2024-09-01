@@ -83,4 +83,33 @@ class StoreControllerTest extends RestDocsTest {
                             fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
     }
 
+    @Test
+    void 가게_상세_조회() {
+        // given
+        String name = "상호명";
+        String description = "가게 설명";
+        String fullAddress = "주소";
+        String categoryName = "한식";
+
+        StoreResult storeResult = new StoreResult(storeUuid, name, description, fullAddress, categoryUuid, categoryName,
+                LocalDateTime.now(), LocalDateTime.now());
+        when(storeService.find(storeUuid)).thenReturn(storeResult);
+
+        given().contentType("application/json")
+            .get("/api/v1/stores/{storeUuid}", storeUuid.toString())
+            .then()
+            .status(HttpStatus.OK)
+            .apply(document("가게 상세 조회", requestPreprocessor(), responsePreprocessor(),
+                    responseFields(fieldWithPath("result").type(JsonFieldType.STRING).description("결과"),
+                            fieldWithPath("data.uuid").type(JsonFieldType.STRING).description("가게 UUID"),
+                            fieldWithPath("data.name").type(JsonFieldType.STRING).description("상호명"),
+                            fieldWithPath("data.description").type(JsonFieldType.STRING).description("가게 설명"),
+                            fieldWithPath("data.fullAddress").type(JsonFieldType.STRING).description("가게 주소"),
+                            fieldWithPath("data.categoryUuid").type(JsonFieldType.STRING).description("카테고리 UUID"),
+                            fieldWithPath("data.categoryName").type(JsonFieldType.STRING).description("카테고리명"),
+                            fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("가게 생성 시간"),
+                            fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("가게 수정 시간"),
+                            fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
+    }
+
 }

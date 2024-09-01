@@ -5,6 +5,8 @@ import static org.mockito.Mockito.when;
 
 import com.fstuckint.baedalyogieats.storage.db.core.store.CategoryEntity;
 import com.fstuckint.baedalyogieats.storage.db.core.store.StoreEntity;
+import com.fstuckint.baedalyogieats.storage.db.core.store.StoreRepository;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -15,62 +17,27 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class StoreServiceTest {
+class StoreFinderTest {
 
     private UUID ownerUuid;
 
-    private UUID categoryUuid;
-
     private UUID storeUuid;
 
-    @Mock
-    private StoreRegister storeRegister;
+    private UUID categoryUuid;
 
     @Mock
+    private StoreRepository storeRepository;
+
     private StoreFinder storeFinder;
-
-    private StoreService storeService;
 
     @BeforeEach
     void setUp() {
         this.ownerUuid = UUID.randomUUID();
-        this.categoryUuid = UUID.randomUUID();
         this.storeUuid = UUID.randomUUID();
+        this.categoryUuid = UUID.randomUUID();
 
-        MockitoAnnotations.openMocks(this);
-        storeService = new StoreService(storeRegister, storeFinder);
-    }
-
-    @Test
-    void 가게를_등록한다() {
-        // given
-        String name = "상호명";
-        String description = "가게 설명";
-        String fullAddress = "주소";
-        String categoryName = "한식";
-
-        Owner owner = new Owner(ownerUuid);
-        Category category = new Category(categoryUuid, categoryName);
-        Store store = new Store(name, description, fullAddress, category);
-        OwnerStore ownerStore = new OwnerStore(owner, store);
-
-        CategoryEntity categoryEntity = new CategoryEntity(categoryName);
-        ReflectionTestUtils.setField(categoryEntity, "uuid", categoryUuid);
-        StoreEntity storeEntity = ownerStore.toEntity(categoryEntity);
-        ReflectionTestUtils.setField(storeEntity, "uuid", storeUuid);
-        when(storeRegister.register(ownerStore)).thenReturn(StoreResult.of(storeEntity));
-
-        // when
-        StoreResult result = storeService.register(ownerStore);
-
-        // then
-        assertThat(result).isNotNull();
-        assertThat(result.uuid()).isEqualTo(storeUuid);
-        assertThat(result.name()).isEqualTo(name);
-        assertThat(result.description()).isEqualTo(description);
-        assertThat(result.fullAddress()).isEqualTo(fullAddress);
-        assertThat(result.categoryUuid()).isEqualTo(categoryUuid);
-        assertThat(result.categoryName()).isEqualTo(categoryName);
+        MockitoAnnotations.initMocks(this);
+        storeFinder = new StoreFinder(storeRepository);
     }
 
     @Test
@@ -90,10 +57,11 @@ class StoreServiceTest {
         ReflectionTestUtils.setField(categoryEntity, "uuid", categoryUuid);
         StoreEntity storeEntity = ownerStore.toEntity(categoryEntity);
         ReflectionTestUtils.setField(storeEntity, "uuid", storeUuid);
-        when(storeFinder.find(storeUuid)).thenReturn(StoreResult.of(storeEntity));
+
+        when(storeRepository.findByUuid(storeUuid)).thenReturn(Optional.of(storeEntity));
 
         // when
-        StoreResult result = storeService.find(storeUuid);
+        StoreResult result = storeFinder.find(storeUuid);
 
         // then
         assertThat(result).isNotNull();
