@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
 
@@ -22,4 +21,5 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
 
     Optional<PaymentEntity> findByUuidAndIsCancelFalse(UUID uuid);
 
+    Optional<PaymentEntity> findByOrderUuid(UUID uuid);
 }
