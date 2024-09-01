@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record StoreResponse(UUID uuid, String name, String description, String fullAddress, UUID categoryUuid,
-        String categoryName, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        String categoryName, UUID ownerUuid, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
     public static StoreResponse of(StoreResult storeResult) {
         return new StoreResponse(storeResult.uuid(), storeResult.name(), storeResult.description(),
                 storeResult.fullAddress(), storeResult.categoryUuid(), storeResult.categoryName(),
-                storeResult.createdAt(), storeResult.updatedAt());
+                storeResult.ownerUuid(), storeResult.createdAt(), storeResult.updatedAt());
     }
 }
