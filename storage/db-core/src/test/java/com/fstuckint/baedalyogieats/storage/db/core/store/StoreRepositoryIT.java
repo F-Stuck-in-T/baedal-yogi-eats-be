@@ -3,7 +3,6 @@ package com.fstuckint.baedalyogieats.storage.db.core.store;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fstuckint.baedalyogieats.storage.db.CoreDbContextTest;
-import com.fstuckint.baedalyogieats.storage.db.core.category.CategoryEntity;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
