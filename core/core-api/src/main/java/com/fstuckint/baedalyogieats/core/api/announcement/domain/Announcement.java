@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class Announcement {
 
     private String title;
-
     private String content;
 
     public AnnouncementEntity toEntity() {

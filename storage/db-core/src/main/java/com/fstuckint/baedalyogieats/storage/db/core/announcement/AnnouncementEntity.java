@@ -2,6 +2,7 @@ package com.fstuckint.baedalyogieats.storage.db.core.announcement;
 
 import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Table(name = "p_announcement")
 public class AnnouncementEntity extends BaseEntity {
 
     private String title;
