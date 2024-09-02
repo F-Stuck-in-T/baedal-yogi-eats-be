@@ -4,6 +4,7 @@ import static com.fstuckint.baedalyogieats.test.api.RestDocsUtils.requestPreproc
 import static com.fstuckint.baedalyogieats.test.api.RestDocsUtils.responsePreprocessor;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -18,7 +19,9 @@ import com.fstuckint.baedalyogieats.core.api.store.domain.CategoryResult;
 import com.fstuckint.baedalyogieats.core.api.store.domain.CategoryService;
 import com.fstuckint.baedalyogieats.test.api.RestDocsTest;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -67,6 +70,29 @@ class CategoryControllerTest extends RestDocsTest {
                             fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("카테고리 생성 시간"),
                             fieldWithPath("data.updatedAt").type(JsonFieldType.STRING).description("카테고리 수정 시간"),
                             fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
+    }
+
+    @Test
+    void 카테고리_목록_조회() {
+        List<CategoryResult> categoryResults = IntStream.rangeClosed(1, 11)
+            .mapToObj(i -> new CategoryResult(UUID.randomUUID(), "카테고리" + i, LocalDateTime.now(), LocalDateTime.now()))
+            .toList();
+
+        when(categoryService.read()).thenReturn(categoryResults);
+
+        given().get("/api/v1/category")
+            .then()
+            .status(HttpStatus.OK)
+            .apply(document("카테고리 목록 조회", requestPreprocessor(), responsePreprocessor(),
+                    responseFields(fieldWithPath("result").type(JsonFieldType.STRING).description("결과"),
+                            fieldWithPath("data").type(JsonFieldType.ARRAY).description("카테고리 목록"),
+                            fieldWithPath("data[].uuid").type(JsonFieldType.STRING).description("카테고리 UUID"),
+                            fieldWithPath("data[].name").type(JsonFieldType.STRING).description("카테고리명"),
+                            fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("가게 생성 시간"),
+                            fieldWithPath("data[].updatedAt").type(JsonFieldType.STRING).description("가게 수정 시간"),
+                            fieldWithPath("error").type(JsonFieldType.NULL).ignored())));
+
+        verify(categoryService).read();
     }
 
 }
