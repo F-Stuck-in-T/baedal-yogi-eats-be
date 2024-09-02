@@ -11,8 +11,4 @@ public class RegisterOrderResponse {
 
     private UUID orderUuid;
 
-    public static RegisterOrderResponse of(OrderInfo info) {
-        return new RegisterOrderResponse(info.getUuid());
-    }
-
 }
