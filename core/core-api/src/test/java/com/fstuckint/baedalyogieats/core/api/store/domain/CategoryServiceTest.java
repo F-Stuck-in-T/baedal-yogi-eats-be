@@ -1,9 +1,12 @@
 package com.fstuckint.baedalyogieats.core.api.store.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fstuckint.baedalyogieats.storage.db.core.store.CategoryEntity;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -21,6 +24,9 @@ class CategoryServiceTest {
     @Mock
     private CategoryRegister categoryRegister;
 
+    @Mock
+    private CategoryReader categoryReader;
+
     private CategoryService categoryService;
 
     @BeforeEach
@@ -28,7 +34,7 @@ class CategoryServiceTest {
         this.categoryUuid = UUID.randomUUID();
 
         MockitoAnnotations.openMocks(this);
-        categoryService = new CategoryService(categoryRegister);
+        categoryService = new CategoryService(categoryRegister, categoryReader);
     }
 
     @Test
@@ -47,6 +53,22 @@ class CategoryServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.uuid()).isEqualTo(categoryUuid);
         assertThat(result.name()).isEqualTo(name);
+    }
+
+    @Test
+    void 카테고리_목록을_조회한다() {
+        // given
+        List<CategoryResult> expectedResults = List.of(
+                new CategoryResult(UUID.randomUUID(), "한식", LocalDateTime.now(), LocalDateTime.now()),
+                new CategoryResult(UUID.randomUUID(), "중식", LocalDateTime.now(), LocalDateTime.now()));
+        when(categoryReader.read()).thenReturn(expectedResults);
+
+        // when
+        List<CategoryResult> results = categoryService.read();
+
+        // then
+        assertThat(results).isEqualTo(expectedResults);
+        verify(categoryReader).read();
     }
 
 }
