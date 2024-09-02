@@ -1,10 +1,12 @@
 package com.fstuckint.baedalyogieats.core.api.payment.domain;
 
-import com.fstuckint.baedalyogieats.storage.db.core.payment.*;
-import lombok.*;
+import com.fstuckint.baedalyogieats.storage.db.core.payment.PaymentEntity;
+import com.fstuckint.baedalyogieats.storage.db.core.payment.PaymentType;
+import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
 
-import java.util.*;
-
+@Getter
 @Builder
 public class PaymentInfo {
 
