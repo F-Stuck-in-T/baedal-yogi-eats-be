@@ -2,6 +2,7 @@ package com.fstuckint.baedalyogieats.storage.db.core.customerreport;
 
 import com.fstuckint.baedalyogieats.storage.db.core.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "p_customer_report")
 public class CustomerReportEntity extends BaseEntity {
 
     private UUID userUuid;

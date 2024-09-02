@@ -62,7 +62,7 @@ public class CustomerReportController {
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
-    // 작성자만 가능
+    // 작성자만 가능 또는 관리자
     @DeleteMapping("/{reportUuid}")
     public ResponseEntity<ApiResponse<?>> deleteQuestion(@PathVariable UUID reportUuid,
             @RequestHeader(JwtUtils.AUTHORIZATION_HEADER) String bearerToken) {

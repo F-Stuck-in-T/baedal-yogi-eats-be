@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Table(name = "p_payment")
 public class PaymentEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)

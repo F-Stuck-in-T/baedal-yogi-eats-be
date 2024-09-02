@@ -20,7 +20,7 @@ public class AnnouncementController {
 
     private final AnnouncementService announcementService;
 
-    // 어드민만 가능
+    // 관리자만
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createAnnouncemnet(@RequestBody AnnouncementRequest announcementRequest) {
         AnnouncementResponse data = announcementService.createAnnouncement(announcementRequest);
@@ -52,7 +52,7 @@ public class AnnouncementController {
         return ResponseEntity.ok(ApiResponse.success(data));
     }
 
-    // 관리자만 가능
+    // 관리자만
     @DeleteMapping("/{announcementUuid}")
     public ResponseEntity<ApiResponse<?>> deleteAnnouncement(@PathVariable UUID announcementUuid) {
         AnnouncementResponse data = announcementService.deleteAnnouncement(announcementUuid);
