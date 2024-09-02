@@ -58,8 +58,8 @@ class StoreServiceTest {
         String categoryName = "한식";
 
         Owner owner = new Owner(ownerUuid);
-        Category category = new Category(categoryUuid, categoryName);
-        Store store = new Store(name, description, fullAddress, category);
+        CategoryWithUuid categoryWithUuid = new CategoryWithUuid(categoryUuid, categoryName);
+        Store store = new Store(name, description, fullAddress, categoryWithUuid);
         OwnerStore ownerStore = new OwnerStore(owner, store);
 
         CategoryEntity categoryEntity = new CategoryEntity(categoryName);
@@ -90,8 +90,8 @@ class StoreServiceTest {
         String categoryName = "한식";
 
         Owner owner = new Owner(ownerUuid);
-        Category category = new Category(categoryUuid, categoryName);
-        Store store = new Store(name, description, fullAddress, category);
+        CategoryWithUuid categoryWithUuid = new CategoryWithUuid(categoryUuid, categoryName);
+        Store store = new Store(name, description, fullAddress, categoryWithUuid);
         OwnerStore ownerStore = new OwnerStore(owner, store);
 
         CategoryEntity categoryEntity = new CategoryEntity(categoryName);

@@ -19,7 +19,7 @@ public class StoreRegister {
     }
 
     public StoreResult register(OwnerStore ownerStore) {
-        CategoryEntity categoryEntity = categoryRepository.findByUuid(ownerStore.store().category().uuid())
+        CategoryEntity categoryEntity = categoryRepository.findByUuid(ownerStore.store().categoryWithUuid().uuid())
             .orElseThrow();
         StoreEntity registeredStore = storeRepository.add(ownerStore.toEntity(categoryEntity));
         return StoreResult.of(registeredStore);
