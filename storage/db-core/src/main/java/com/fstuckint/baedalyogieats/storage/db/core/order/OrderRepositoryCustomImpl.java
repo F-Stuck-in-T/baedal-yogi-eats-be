@@ -30,23 +30,20 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        booleanBuilder.and(buyerEntity.userUuid.eq(userId))
-                .and(orderEntity.isDeleted.eq(false));
+        booleanBuilder.and(buyerEntity.userUuid.eq(userId)).and(orderEntity.isDeleted.eq(false));
 
         JPAQuery<OrderEntity> query = jpaQueryFactory.select(orderEntity)
-                .from(orderEntity)
-                .leftJoin(buyerEntity)
-                .on(orderEntity.buyerUuid.eq(buyerEntity.uuid))
-                .where(booleanBuilder)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+            .from(orderEntity)
+            .leftJoin(buyerEntity)
+            .on(orderEntity.buyerUuid.eq(buyerEntity.uuid))
+            .where(booleanBuilder)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
 
         pageable.getSort().forEach(order -> {
             PathBuilder<OrderEntity> orderPath = new PathBuilder<>(OrderEntity.class, "orderEntity");
-            OrderSpecifier<?> orderSpecifier = new OrderSpecifier(
-                    order.isAscending() ? Order.ASC : Order.DESC,
-                    orderPath.get(order.getProperty())
-            );
+            OrderSpecifier<?> orderSpecifier = new OrderSpecifier(order.isAscending() ? Order.ASC : Order.DESC,
+                    orderPath.get(order.getProperty()));
             query.orderBy(orderSpecifier);
         });
 
@@ -58,23 +55,21 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        booleanBuilder.and(orderEntity.storeUuid.eq(storeUuid))
-                .and(orderEntity.isDeleted.eq(false));
+        booleanBuilder.and(orderEntity.storeUuid.eq(storeUuid)).and(orderEntity.isDeleted.eq(false));
 
         JPAQuery<OrderEntity> query = jpaQueryFactory.selectFrom(orderEntity)
-                .where(booleanBuilder)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+            .where(booleanBuilder)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
 
         pageable.getSort().forEach(order -> {
             PathBuilder<OrderEntity> orderPath = new PathBuilder<>(OrderEntity.class, "orderEntity");
-            OrderSpecifier<?> orderSpecifier = new OrderSpecifier(
-                    order.isAscending() ? Order.ASC : Order.DESC,
-                    orderPath.get(order.getProperty())
-            );
+            OrderSpecifier<?> orderSpecifier = new OrderSpecifier(order.isAscending() ? Order.ASC : Order.DESC,
+                    orderPath.get(order.getProperty()));
             query.orderBy(orderSpecifier);
         });
 
         return query.fetch();
     }
+
 }

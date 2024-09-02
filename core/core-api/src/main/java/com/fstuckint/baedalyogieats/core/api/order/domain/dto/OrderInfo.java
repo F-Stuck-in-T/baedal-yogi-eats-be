@@ -27,14 +27,14 @@ public class OrderInfo {
 
     public static OrderInfo of(OrderEntity order) {
         return OrderInfo.builder()
-                .uuid(order.getUuid())
-                .orderType(order.getOrderType())
-                .orderStatus(order.getOrderStatus())
-                .buyerUuid(order.getBuyerUuid())
-                .storeUuid(order.getStoreUuid())
-                .totalPrice(order.getTotalPrice())
-                .createdAT(order.getCreatedAt())
-                .build();
+            .uuid(order.getUuid())
+            .orderType(order.getOrderType())
+            .orderStatus(order.getOrderStatus())
+            .buyerUuid(order.getBuyerUuid())
+            .storeUuid(order.getStoreUuid())
+            .totalPrice(order.getTotalPrice())
+            .createdAT(order.getCreatedAt())
+            .build();
     }
 
 }

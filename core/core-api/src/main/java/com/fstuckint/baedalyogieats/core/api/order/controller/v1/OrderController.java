@@ -71,4 +71,5 @@ public class OrderController {
         List<OrderDetailsInfo> orderDetailsInfos = orderService.retrieveOrderListStore(storeUuid, pageable);
         return ApiResponse.success(orderDetailsInfos);
     }
+
 }

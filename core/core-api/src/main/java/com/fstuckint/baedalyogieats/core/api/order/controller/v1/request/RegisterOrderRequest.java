@@ -15,6 +15,7 @@ public class RegisterOrderRequest implements Serializable {
     private OrderType orderType;
 
     private RegisterBuyerRequest buyer;
+
     private UUID storeUuid;
 
     private List<RegisterOrderItemRequest> orderItems = new ArrayList<>();
@@ -27,9 +28,12 @@ public class RegisterOrderRequest implements Serializable {
             .map(RegisterOrderItemRequest::toCommand)
             .toList();
 
-        return RegisterOrderCommand.builder().orderType(this.orderType).buyer(buyer)
-                .storeUuid(this.storeUuid)
-                .orderItems(orderItems).build();
+        return RegisterOrderCommand.builder()
+            .orderType(this.orderType)
+            .buyer(buyer)
+            .storeUuid(this.storeUuid)
+            .orderItems(orderItems)
+            .build();
     }
 
     @Getter

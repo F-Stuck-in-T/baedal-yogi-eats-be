@@ -22,4 +22,5 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, UUID> {
     Optional<PaymentEntity> findByUuidAndIsCancelFalse(UUID uuid);
 
     Optional<PaymentEntity> findByOrderUuid(UUID uuid);
+
 }

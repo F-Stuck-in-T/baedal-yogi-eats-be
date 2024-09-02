@@ -8,15 +8,19 @@ import java.util.*;
 @Getter
 @Builder
 public class OrderItemInfo {
+
     private String name;
+
     private Integer unitPrice;
+
     private UUID productUuid;
 
     public static OrderItemInfo of(OrderItemEntity orderItemEntity) {
         return OrderItemInfo.builder()
-                .name(orderItemEntity.getName())
-                .unitPrice(orderItemEntity.getUnitPrice())
-                .productUuid(orderItemEntity.getProductUuid())
-                .build();
+            .name(orderItemEntity.getName())
+            .unitPrice(orderItemEntity.getUnitPrice())
+            .productUuid(orderItemEntity.getProductUuid())
+            .build();
     }
+
 }

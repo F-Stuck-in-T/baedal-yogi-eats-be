@@ -23,6 +23,7 @@ public class OrderEntity extends BaseEntity {
 
     @Column(nullable = false)
     private UUID buyerUuid;
+
     @Column(nullable = false)
     private UUID storeUuid;
 

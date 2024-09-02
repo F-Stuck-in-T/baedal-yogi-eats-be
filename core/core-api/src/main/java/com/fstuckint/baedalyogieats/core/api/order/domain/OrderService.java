@@ -84,8 +84,8 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderDetailsInfo retrieveOrderDetails(UUID uuid) {
         OrderDetailsInfo orderDetailsInfo = orderReader.getOrderAgg(uuid);
-        PaymentEntity payment = paymentRepository.findByOrderUuid(uuid).orElseThrow(
-                () -> new PaymentException(NOT_FOUND_ERROR));
+        PaymentEntity payment = paymentRepository.findByOrderUuid(uuid)
+            .orElseThrow(() -> new PaymentException(NOT_FOUND_ERROR));
         orderDetailsInfo.addPaymentInfo(PaymentInfo.of(payment));
         return orderDetailsInfo;
     }
@@ -94,8 +94,8 @@ public class OrderService {
     public List<OrderDetailsInfo> retrieveOrderList(Pageable pageable) {
         List<OrderDetailsInfo> orderDetailsInfos = orderReader.findOrderAgg(pageable);
         orderDetailsInfos.stream().forEach(orderDetailsInfo -> {
-            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid()).orElseThrow(
-                    () -> new PaymentException(NOT_FOUND_ERROR));
+            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid())
+                .orElseThrow(() -> new PaymentException(NOT_FOUND_ERROR));
             orderDetailsInfo.addPaymentInfo(PaymentInfo.of(payment));
         });
         return orderDetailsInfos;
@@ -105,8 +105,8 @@ public class OrderService {
     public List<OrderDetailsInfo> retrieveOrderListUser(UUID storeId, Pageable pageable) {
         List<OrderDetailsInfo> orderDetailsInfos = orderReader.findOrderAggByUser(storeId, pageable);
         orderDetailsInfos.stream().forEach(orderDetailsInfo -> {
-            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid()).orElseThrow(
-                    () -> new PaymentException(NOT_FOUND_ERROR));
+            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid())
+                .orElseThrow(() -> new PaymentException(NOT_FOUND_ERROR));
             orderDetailsInfo.addPaymentInfo(PaymentInfo.of(payment));
         });
         return orderDetailsInfos;
@@ -116,10 +116,11 @@ public class OrderService {
     public List<OrderDetailsInfo> retrieveOrderListStore(UUID storeId, Pageable pageable) {
         List<OrderDetailsInfo> orderDetailsInfos = orderReader.findOrderAggByStore(storeId, pageable);
         orderDetailsInfos.stream().forEach(orderDetailsInfo -> {
-            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid()).orElseThrow(
-                    () -> new PaymentException(NOT_FOUND_ERROR));
+            PaymentEntity payment = paymentRepository.findByOrderUuid(orderDetailsInfo.getOrderUuid())
+                .orElseThrow(() -> new PaymentException(NOT_FOUND_ERROR));
             orderDetailsInfo.addPaymentInfo(PaymentInfo.of(payment));
         });
         return orderDetailsInfos;
     }
+
 }

@@ -13,9 +13,7 @@ public class PaymentInfo {
     private PaymentType paymentType;
 
     public static PaymentInfo of(PaymentEntity payment) {
-        return PaymentInfo.builder()
-                .paymentUuid(payment.getUuid())
-                .paymentType(payment.getStatus())
-                .build();
+        return PaymentInfo.builder().paymentUuid(payment.getUuid()).paymentType(payment.getStatus()).build();
     }
+
 }

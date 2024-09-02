@@ -16,8 +16,8 @@ public class OrderStore {
 
     private final BuyerRepository buyerRepository;
 
-    public OrderEntity storeOrderAgg(OrderEntity initOrder, BuyerEntity initBuyer
-            , List<OrderItemEntity> initOrderItems) {
+    public OrderEntity storeOrderAgg(OrderEntity initOrder, BuyerEntity initBuyer,
+            List<OrderItemEntity> initOrderItems) {
 
         BuyerEntity buyer = buyerRepository.save(initBuyer);
         initOrder.addBuyer(initBuyer.getUuid());

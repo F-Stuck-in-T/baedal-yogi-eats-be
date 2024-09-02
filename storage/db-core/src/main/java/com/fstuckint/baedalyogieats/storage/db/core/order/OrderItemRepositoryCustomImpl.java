@@ -14,6 +14,7 @@ import static com.fstuckint.baedalyogieats.storage.db.core.order.QOrderItemEntit
 public class OrderItemRepositoryCustomImpl implements OrderItemRepositoryCustom {
 
     private final EntityManager em;
+
     private JPAQueryFactory jpaQueryFactory;
 
     public OrderItemRepositoryCustomImpl(EntityManager em) {
@@ -24,7 +25,8 @@ public class OrderItemRepositoryCustomImpl implements OrderItemRepositoryCustom 
     @Override
     public List<OrderItemEntity> findByOrderUuid(UUID orderUuid) {
         return jpaQueryFactory.selectFrom(orderItemEntity)
-                .where(orderItemEntity.orderEntity.uuid.eq(orderUuid))
-                .fetch();
+            .where(orderItemEntity.orderEntity.uuid.eq(orderUuid))
+            .fetch();
     }
+
 }
