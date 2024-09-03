@@ -5,6 +5,7 @@ import com.fstuckint.baedalyogieats.storage.db.core.store.CategoryRepository;
 import com.fstuckint.baedalyogieats.storage.db.core.store.StoreEntity;
 import com.fstuckint.baedalyogieats.storage.db.core.store.StoreRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class StoreRegister {
@@ -18,6 +19,7 @@ public class StoreRegister {
         this.categoryRepository = categoryRepository;
     }
 
+    @Transactional
     public StoreResult register(OwnerStore ownerStore) {
         CategoryEntity categoryEntity = categoryRepository.findByUuid(ownerStore.store().categoryWithUuid().uuid())
             .orElseThrow();
