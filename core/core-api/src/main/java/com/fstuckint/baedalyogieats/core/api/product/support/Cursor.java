@@ -7,11 +7,28 @@ import org.springframework.data.domain.Sort;
 public record Cursor(String cursor, long limit, String sortKey, Sort.Direction sort) {
 
     public UUID getUuid() {
-        return cursor != null ? UUID.fromString(cursor.split("_")[0]) : null;
+        if (cursor == null || cursor.isEmpty()) {
+            return null;
+        }
+        String[] parts = cursor.split("_");
+        try {
+            return UUID.fromString(parts[0]);
+        }
+        catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public LocalDateTime getTimestamp() {
-        return cursor != null ? LocalDateTime.parse(cursor.split("_")[1]) : null;
+        if (cursor == null || cursor.isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDateTime.parse(cursor.split("_")[1]);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public static String encodeCursor(UUID uuid, LocalDateTime timestamp) {
