@@ -45,7 +45,7 @@ spring:
 storage:
   datasource:
     core:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.postgresql.Driver
       jdbc-url: jdbc:mysql://${storage.database.core-db.url}
       username: ${storage.database.core-db.username}
       password: ${storage.database.core-db.password}
@@ -74,7 +74,7 @@ spring.config.activate.on-profile: dev
 storage:
   datasource:
     core:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.postgresql.Driver
       jdbc-url: jdbc:mysql://${storage.database.core-db.url}
       username: ${storage.database.core-db.username}
       password: ${storage.database.core-db.password}
@@ -103,7 +103,7 @@ spring.config.activate.on-profile: staging
 storage:
   datasource:
     core:
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: org.postgresql.Driver
       jdbc-url: jdbc:mysql://${storage.database.core-db.url}
       username: ${storage.database.core-db.username}
       password: ${storage.database.core-db.password}
