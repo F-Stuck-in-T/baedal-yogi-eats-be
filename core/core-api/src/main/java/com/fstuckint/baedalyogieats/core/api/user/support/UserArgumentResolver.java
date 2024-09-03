@@ -23,8 +23,19 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        UserRole userRole = UserRole.valueOf(userDetails.getAuthorities().iterator().next().getAuthority());
+        String authority = userDetails.getAuthorities().iterator().next().getAuthority();
+        UserRole userRole = getUserRoleFromAuthority(authority);
         return new CurrentUser(userDetails.getUserUuid(), userDetails.getUsername(), userRole);
+    }
+
+    private UserRole getUserRoleFromAuthority(String authority) {
+        return switch (authority) {
+            case "ROLE_CUSTOMER" -> UserRole.CUSTOMER;
+            case "ROLE_OWNER" -> UserRole.OWNER;
+            case "ROLE_MANAGER" -> UserRole.MANAGER;
+            case "ROLE_MASTER" -> UserRole.MASTER;
+            default -> throw new IllegalArgumentException("Unknown authority: " + authority);
+        };
     }
 
 }
